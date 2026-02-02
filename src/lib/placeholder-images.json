@@ -1,3 +1,34 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero-image",
+      "description": "Dr. Monisha Chakraborty addressing a crowd",
+      "imageUrl": "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxmZW1hbGUlMjBsZWFkZXJ8ZW58MHx8fHwxNzcwMDE0NTM0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "female leader"
+    },
+    {
+      "id": "about-image",
+      "description": "Dr. Monisha Chakraborty providing medical care to a community member",
+      "imageUrl": "https://images.unsplash.com/photo-1634839593004-667d278bac49?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjb21tdW5pdHklMjBoZWxwfGVufDB8fHx8MTc3MDAxNDUzNHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "community help"
+    },
+    {
+      "id": "update-1",
+      "description": "A campaign rally in Barishal",
+      "imageUrl": "https://images.unsplash.com/photo-1767327926575-e70fda712917?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8cG9saXRpY2FsJTIwcmFsbHl8ZW58MHx8fHwxNzcwMDE0NTM0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "political rally"
+    },
+    {
+      "id": "update-2",
+      "description": "Dr. Monisha meeting with local leaders",
+      "imageUrl": "https://images.unsplash.com/photo-1515187029135-18ee286d815b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjb21tdW5pdHklMjBtZWV0aW5nfGVufDB8fHx8MTc2OTk5MTY0N3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "community meeting"
+    },
+    {
+      "id": "update-3",
+      "description": "Volunteers distributing campaign materials",
+      "imageUrl": "https://images.unsplash.com/photo-1645937744052-53e4e2d39c5d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxwb2xpdGljYWwlMjB2b2x1bnRlZXJzfGVufDB8fHx8MTc3MDAxNDUzNHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "political volunteers"
+    }
+  ]
 }
