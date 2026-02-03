@@ -16,6 +16,16 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import type { Address } from '@/pages/profile/addresses';
 import { useEffect } from 'react';
+import dynamic from 'next/dynamic';
+import { Skeleton } from '../ui/skeleton';
+
+const DynamicLocationSelector = dynamic(
+    () => import('@/components/LocationSelector').then(mod => mod.LocationSelector),
+    { 
+        ssr: false,
+        loading: () => <Skeleton className="h-96 w-full" />
+    }
+);
 
 const addressSchema = z.object({
   type: z.enum(['Home', 'Office']),
@@ -79,84 +89,99 @@ export function AddressModal({ isOpen, onClose, onSave, addressToEdit }: Address
     onSave(data);
     onClose();
   };
+  
+  const handleLocationSelect = ({ lat, lng, address }: { lat: number; lng: number; address: string }) => {
+    form.setValue('latitude', lat);
+    form.setValue('longitude', lng);
+    
+    const addressParts = address.split(', ');
+    const city = addressParts.length > 2 ? addressParts.slice(-3, -1).join(', ') : '';
+    
+    form.setValue('address', address);
+    form.setValue('city', city);
+  };
+
+  const initialPosition: [number, number] | undefined = addressToEdit?.latitude && addressToEdit.longitude 
+    ? [addressToEdit.latitude, addressToEdit.longitude]
+    : undefined;
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-lg p-0 max-h-[90vh] flex flex-col">
+      <DialogContent className="sm:max-w-2xl p-0 max-h-[90vh] flex flex-col">
         <DialogHeader className="p-6 pb-4 border-b shrink-0">
           <DialogTitle>{addressToEdit ? 'Edit Address' : 'Add a New Address'}</DialogTitle>
           <DialogDescription>
-            Enter your address details below. This will be used for shipping.
+            Enter your address details or select a location on the map.
           </DialogDescription>
         </DialogHeader>
         <div className="flex-1 overflow-y-auto">
           <Form {...form}>
-            <form id="address-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-6">
-              <FormField
-                control={form.control}
-                name="type"
-                render={({ field }) => (
-                  <FormItem className="space-y-3">
-                    <FormLabel>Address Type</FormLabel>
-                    <FormControl>
-                      <RadioGroup
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                        className="flex space-x-4"
-                      >
-                        <FormItem className="flex items-center space-x-2 space-y-0">
-                          <FormControl><RadioGroupItem value="Home" /></FormControl>
-                          <FormLabel className="font-normal">Home</FormLabel>
-                        </FormItem>
-                        <FormItem className="flex items-center space-x-2 space-y-0">
-                          <FormControl><RadioGroupItem value="Office" /></FormControl>
-                          <FormLabel className="font-normal">Office</FormLabel>
-                        </FormItem>
-                      </RadioGroup>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField control={form.control} name="name" render={({ field }) => (
-                  <FormItem><FormLabel>Full Name</FormLabel><FormControl><Input placeholder="John Doe" {...field} /></FormControl><FormMessage /></FormItem>
-              )} />
-              <FormField control={form.control} name="phone" render={({ field }) => (
-                  <FormItem><FormLabel>Phone Number</FormLabel><FormControl><Input placeholder="01712345678" {...field} /></FormControl><FormMessage /></FormItem>
-              )} />
-              <FormField control={form.control} name="address" render={({ field }) => (
-                  <FormItem><FormLabel>Address Line</FormLabel><FormControl><Input placeholder="House 123, Road 45, Dhanmondi" {...field} /></FormControl><FormMessage /></FormItem>
-              )} />
-              <FormField control={form.control} name="city" render={({ field }) => (
-                  <FormItem><FormLabel>City / District</FormLabel><FormControl><Input placeholder="Dhaka - 1205" {...field} /></FormControl><FormMessage /></FormItem>
-              )} />
-              <div className="grid grid-cols-2 gap-4">
-                <FormField control={form.control} name="latitude" render={({ field }) => (
-                    <FormItem><FormLabel>Latitude (Optional)</FormLabel><FormControl><Input type="number" step="any" placeholder="e.g. 23.777176" {...field} onChange={event => field.onChange(+event.target.value)} /></FormControl><FormMessage /></FormItem>
+            <form id="address-form" onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-x-6">
+              <div className="space-y-4 p-6">
+                <FormField
+                  control={form.control}
+                  name="type"
+                  render={({ field }) => (
+                    <FormItem className="space-y-3">
+                      <FormLabel>Address Type</FormLabel>
+                      <FormControl>
+                        <RadioGroup
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                          className="flex space-x-4"
+                        >
+                          <FormItem className="flex items-center space-x-2 space-y-0">
+                            <FormControl><RadioGroupItem value="Home" /></FormControl>
+                            <FormLabel className="font-normal">Home</FormLabel>
+                          </FormItem>
+                          <FormItem className="flex items-center space-x-2 space-y-0">
+                            <FormControl><RadioGroupItem value="Office" /></FormControl>
+                            <FormLabel className="font-normal">Office</FormLabel>
+                          </FormItem>
+                        </RadioGroup>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField control={form.control} name="name" render={({ field }) => (
+                    <FormItem><FormLabel>Full Name</FormLabel><FormControl><Input placeholder="John Doe" {...field} /></FormControl><FormMessage /></FormItem>
                 )} />
-                <FormField control={form.control} name="longitude" render={({ field }) => (
-                    <FormItem><FormLabel>Longitude (Optional)</FormLabel><FormControl><Input type="number" step="any" placeholder="e.g. 90.399452" {...field} onChange={event => field.onChange(+event.target.value)} /></FormControl><FormMessage /></FormItem>
+                <FormField control={form.control} name="phone" render={({ field }) => (
+                    <FormItem><FormLabel>Phone Number</FormLabel><FormControl><Input placeholder="01712345678" {...field} /></FormControl><FormMessage /></FormItem>
                 )} />
+                <FormField control={form.control} name="address" render={({ field }) => (
+                    <FormItem><FormLabel>Full Address</FormLabel><FormControl><Input placeholder="House 123, Road 45, Gulshan 2, Dhaka" {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
+                <FormField control={form.control} name="city" render={({ field }) => (
+                    <FormItem><FormLabel>City / District</FormLabel><FormControl><Input placeholder="Dhaka" {...field} /></FormControl><FormMessage /></FormItem>
+                )} />
+                 <FormField
+                  control={form.control}
+                  name="isDefault"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel>
+                          Set as default shipping address
+                        </FormLabel>
+                      </div>
+                    </FormItem>
+                  )}
+                />
               </div>
-               <FormField
-                control={form.control}
-                name="isDefault"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                    <div className="space-y-1 leading-none">
-                      <FormLabel>
-                        Set as default shipping address
-                      </FormLabel>
-                    </div>
-                  </FormItem>
-                )}
-              />
+              <div className="p-6 pt-0 md:pt-6">
+                <FormLabel>Select on Map</FormLabel>
+                 <div className="mt-2">
+                    <DynamicLocationSelector onLocationSelect={handleLocationSelect} initialPosition={initialPosition} />
+                 </div>
+              </div>
             </form>
           </Form>
         </div>

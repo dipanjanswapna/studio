@@ -1,6 +1,9 @@
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import '@/styles/globals.css';
+import 'leaflet/dist/leaflet.css';
+import 'leaflet-geosearch/dist/geosearch.css';
+import '@/styles/leaflet-custom.css';
 import Header from '@/components/navbar/Header';
 import { AuthProvider } from '@/context/authContext';
 import { WishlistProvider } from '@/context/WishlistContext';

@@ -15,7 +15,10 @@ import { collection, addDoc, updateDoc, deleteDoc, doc, writeBatch, query } from
 import { Skeleton } from '@/components/ui/skeleton';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
-import { GoogleMap, useJsApiLoader, MarkerF, InfoWindowF } from '@react-google-maps/api';
+import dynamic from 'next/dynamic';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import MarkerClusterGroup from 'react-leaflet-cluster';
+import L from 'leaflet';
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -34,72 +37,71 @@ export type Address = {
     longitude?: number;
 };
 
+// Fix for default Leaflet icon issue with webpack
+const leafletIcon = L.icon({
+  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
 const mapContainerStyle = {
   width: '100%',
   height: '100%',
   borderRadius: '0.75rem',
 };
 
-const defaultCenter = {
-  lat: 23.8103,
-  lng: 90.4125,
-};
+const defaultCenter: [number, number] = [23.8103, 90.4125];
 
 function AddressMap({ addresses }: { addresses: Address[] }) {
-    const { isLoaded, loadError } = useJsApiLoader({
-        googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '',
-    });
-
-    const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
-
     const mapCenter = useMemo(() => {
         const validAddresses = addresses.filter(a => a.latitude && a.longitude);
         if (validAddresses.length > 0) {
-            return { lat: validAddresses[0].latitude!, lng: validAddresses[0].longitude! };
+            return [validAddresses[0].latitude!, validAddresses[0].longitude!] as [number, number];
         }
         return defaultCenter;
     }, [addresses]);
-    
-    if (loadError) {
-        return <div className="text-destructive">Error loading maps. Please check your API key.</div>;
-    }
-
-    if (!isLoaded) {
-        return <Skeleton className="aspect-square w-full" />;
-    }
 
     return (
         <div className="aspect-square w-full bg-muted rounded-lg overflow-hidden">
-            <GoogleMap
-                mapContainerStyle={mapContainerStyle}
+            <MapContainer
                 center={mapCenter}
                 zoom={12}
+                scrollWheelZoom={true}
+                style={mapContainerStyle}
             >
-                {addresses.map(addr => (
-                    addr.latitude && addr.longitude && (
-                        <MarkerF
-                            key={addr.id}
-                            position={{ lat: addr.latitude, lng: addr.longitude }}
-                            onClick={() => setSelectedAddress(addr)}
-                        />
-                    )
-                ))}
-
-                {selectedAddress && selectedAddress.latitude && selectedAddress.longitude && (
-                     <InfoWindowF
-                        position={{ lat: selectedAddress.latitude, lng: selectedAddress.longitude }}
-                        onCloseClick={() => setSelectedAddress(null)}
-                     >
-                         <div>
-                            <h4 className="font-bold">{selectedAddress.name} ({selectedAddress.type})</h4>
-                            <p className="text-sm">{selectedAddress.address}</p>
-                         </div>
-                     </InfoWindowF>
-                )}
-            </GoogleMap>
+                <TileLayer
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+                <MarkerClusterGroup chunkedLoading>
+                  {addresses.map(addr => (
+                      addr.latitude && addr.longitude && (
+                          <Marker
+                              key={addr.id}
+                              position={[addr.latitude, addr.longitude]}
+                              icon={leafletIcon}
+                          >
+                            <Popup>
+                                <h4 className="font-bold">{addr.name} ({addr.type})</h4>
+                                <p className="text-sm">{addr.address}</p>
+                            </Popup>
+                          </Marker>
+                      )
+                  ))}
+                </MarkerClusterGroup>
+            </MapContainer>
         </div>
     );
 }
+
+const DynamicAddressMap = dynamic(() => Promise.resolve(AddressMap), {
+  ssr: false,
+  loading: () => <Skeleton className="aspect-square w-full" />,
+});
 
 
 export default function AddressesPage() {
@@ -281,7 +283,7 @@ export default function AddressesPage() {
                             <CardDescription>Visual representation of your saved addresses.</CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <AddressMap addresses={addresses || []} />
+                            <DynamicAddressMap addresses={addresses || []} />
                         </CardContent>
                     </Card>
                 </div>
