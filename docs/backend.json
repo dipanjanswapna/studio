@@ -1,0 +1,522 @@
+{
+  "entities": {
+    "SiteSettings": {
+      "title": "Site Settings",
+      "description": "Global settings for the application.",
+      "type": "object",
+      "properties": {
+        "siteName": {
+          "type": "string",
+          "description": "The public name of the website."
+        },
+        "siteDescription": {
+          "type": "string",
+          "description": "A short description of the website for SEO."
+        },
+        "googleAnalyticsId": {
+          "type": "string",
+          "description": "Google Analytics Tracking ID."
+        }
+      }
+    },
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Represents a user's profile information.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "The unique identifier for the user."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "The user's email address."
+        },
+        "name": {
+          "type": "string",
+          "description": "The user's display name."
+        },
+        "photoURL": {
+          "type": "string",
+          "format": "uri",
+          "description": "The URL of the user's profile picture."
+        },
+        "phone": {
+          "type": "string",
+          "description": "The user's phone number."
+        },
+        "role": {
+          "type": "string",
+          "enum": ["ADMIN", "VENDOR", "OUTLET", "STAFF", "CUSTOMER"],
+          "description": "The user's role in the system."
+        },
+        "dob": {
+            "type": "string",
+            "format": "date",
+            "description": "The user's date of birth."
+        },
+        "gender": {
+            "type": "string",
+            "enum": ["male", "female", "other"],
+            "description": "The user's gender."
+        },
+        "membershipId": {
+            "type": "string",
+            "description": "The user's membership ID."
+        },
+        "membershipTier": {
+            "type": "string",
+            "enum": ["Gold", "Platinum", "Diamond"],
+            "description": "The user's membership tier."
+        },
+        "storeDescription": {
+            "type": "string",
+            "description": "A public description for the vendor's store."
+        },
+        "outletAddress": {
+            "type": "string",
+            "description": "The physical address of the outlet."
+        },
+        "bankName": {
+            "type": "string",
+            "description": "The vendor's bank name for payouts."
+        },
+        "accountName": {
+            "type": "string",
+            "description": "The name on the vendor's bank account."
+        },
+        "accountNumber": {
+            "type": "string",
+            "description": "The vendor's bank account number."
+        }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Represents a product in the e-commerce store.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "brand": { "type": "string" },
+        "category": { "type": "string" },
+        "imageIds": { "type": "array", "items": { "type": "string" } },
+        "vendorId": { "type": "string", "description": "The UID of the vendor user who owns this product." },
+        "rating": { "type": "number" },
+        "reviews": { "type": "number" },
+        "description": { "type": "string" },
+        "variants": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "id": { "type": "string" },
+                    "name": { "type": "string" },
+                    "price": { "type": "number" },
+                    "stock": { "type": "number" },
+                    "attributes": { "type": "object" },
+                    "imageIds": { "type": "array", "items": { "type": "string" } }
+                }
+            }
+        },
+        "variantAttributes": { "type": "array", "items": { "type": "string" } },
+        "flashSale": {
+            "type": "object",
+            "properties": {
+                "price": { "type": "number" },
+                "endTime": { "type": "string", "format": "date-time" },
+                "initialStock": { "type": "number" },
+                "sold": { "type": "number" }
+            }
+        },
+        "deal": {
+             "type": "object",
+             "properties": {
+                "name": { "type": "string" },
+                "slug": { "type": "string" },
+                "discountPercentage": { "type": "number" },
+                "endTime": { "type": "string", "format": "date-time" }
+             }
+        },
+        "discountPercentage": { "type": "number" },
+        "isFeatured": { "type": "boolean" },
+        "preOrder": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Category": {
+      "title": "Category",
+      "description": "Represents a product category, potentially with nested groups and subcategories for mega menus.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "href": { "type": "string" },
+        "order": { "type": "number", "description": "Order for sorting in the menu." },
+        "iconName": {
+          "type": "string",
+          "description": "The name of the lucide-react icon for the category (optional)."
+        },
+        "groups": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "subcategories": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": { "type": "string" },
+                    "href": { "type": "string" }
+                  },
+                  "required": ["name", "href"]
+                }
+              }
+            },
+            "required": ["name", "subcategories"]
+          }
+        }
+      },
+      "required": ["name", "href", "order"]
+    },
+    "Brand": {
+      "title": "Brand",
+      "description": "Represents a product brand.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "logoImageId": { "type": "string" },
+        "isFeatured": { "type": "boolean" },
+        "order": { "type": "number" }
+      },
+      "required": ["name", "logoImageId", "order"]
+    },
+    "Deal": {
+        "title": "Deal",
+        "description": "Represents a promotional deal.",
+        "type": "object",
+        "properties": {
+            "id": { "type": "string" },
+            "name": { "type": "string" },
+            "slug": { "type": "string" },
+            "description": { "type": "string" },
+            "endTime": { "type": "string", "format": "date-time" },
+            "productIds": { "type": "array", "items": { "type": "string" } },
+            "bannerImageUrl": { "type": "string" },
+            "discountPercentage": { "type": "number" }
+        }
+    },
+    "UserAddress": {
+      "title": "User Address",
+      "description": "Represents a user's saved shipping address.",
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["Home", "Office"] },
+        "isDefault": { "type": "boolean" },
+        "name": { "type": "string" },
+        "address": { "type": "string" },
+        "city": { "type": "string" },
+        "phone": { "type": "string" },
+        "latitude": { "type": "number", "description": "The latitude of the address." },
+        "longitude": { "type": "number", "description": "The longitude of the address." }
+      },
+      "required": ["type", "name", "address", "city", "phone"]
+    },
+    "UserPaymentMethod": {
+      "title": "User Payment Method",
+      "description": "Represents a user's saved payment card.",
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["Visa", "Mastercard", "Card"] },
+        "last4": { "type": "string" },
+        "expiry": { "type": "string" },
+        "cardHolderName": { "type": "string" },
+        "isDefault": { "type": "boolean" }
+      },
+      "required": ["type", "last4", "expiry", "cardHolderName"]
+    },
+    "UserWishlistItem": {
+      "title": "User Wishlist Item",
+      "description": "Represents a single product in a user's wishlist.",
+      "type": "object",
+      "properties": {
+          "productId": { "type": "string" },
+          "addedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["productId", "addedAt"]
+    },
+    "CartItem": {
+      "title": "Cart Item",
+      "description": "Represents a single item in a user's shopping cart.",
+      "type": "object",
+      "properties": {
+        "productId": { "type": "string" },
+        "variantId": { "type": "string" },
+        "quantity": { "type": "number" },
+        "addedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["productId", "variantId", "quantity", "addedAt"]
+    },
+    "Review": {
+        "title": "Product Review",
+        "description": "Represents a user's review of a product.",
+        "type": "object",
+        "properties": {
+            "userId": { "type": "string" },
+            "userName": { "type": "string" },
+            "productId": { "type": "string" },
+            "productName": { "type": "string" },
+            "productImageId": { "type": "string" },
+            "rating": { "type": "number" },
+            "title": { "type": "string" },
+            "comment": { "type": "string" },
+            "createdAt": { "type": "string", "format": "date-time" }
+        },
+        "required": ["userId", "userName", "productId", "productName", "rating", "comment", "createdAt"]
+    },
+    "OrderItem": {
+      "title": "Order Item",
+      "description": "Represents a single item within an order.",
+      "type": "object",
+      "properties": {
+        "productId": { "type": "string" },
+        "variantId": { "type": "string" },
+        "productName": { "type": "string" },
+        "variantName": { "type": "string" },
+        "quantity": { "type": "number" },
+        "price": { "type": "number", "description": "Price per unit at time of purchase." },
+        "imageUrl": { "type": "string" },
+        "productImageId": { "type": "string" }
+      },
+      "required": ["productId", "variantId", "productName", "quantity", "price"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Represents a customer's order.",
+      "type": "object",
+      "properties": {
+        "shortId": { "type": "string" },
+        "userId": { "type": "string" },
+        "customerInfo": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "email": { "type": "string" },
+            "phone": { "type": "string" },
+            "address": { "type": "string" },
+            "city": { "type": "string" }
+          },
+          "required": ["name", "email", "phone", "address"]
+        },
+        "items": { "type": "array", "items": { "$ref": "#/entities/OrderItem" } },
+        "subtotal": { "type": "number" },
+        "shippingFee": { "type": "number" },
+        "total": { "type": "number" },
+        "status": { "type": "string", "enum": ["Pending", "Processing", "Shipped", "Delivered", "Cancelled"] },
+        "paymentMethod": {
+          "type": "string",
+          "description": "A string describing the payment method, e.g. 'Cash on Delivery' or 'Visa ending in 1234'."
+        },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "customerInfo", "items", "total", "status", "createdAt"]
+    },
+    "ReturnItem": {
+      "title": "Return Item",
+      "description": "Represents a single item being returned.",
+      "type": "object",
+      "properties": {
+        "productId": { "type": "string" },
+        "variantId": { "type": "string" },
+        "productName": { "type": "string" },
+        "variantName": { "type": "string" },
+        "quantity": { "type": "number" },
+        "price": { "type": "number", "description": "Price per unit at time of purchase." },
+        "imageUrl": { "type": "string" }
+      },
+      "required": ["productId", "variantId", "productName", "quantity", "price"]
+    },
+    "ReturnRequest": {
+      "title": "Return Request",
+      "description": "Represents a user's request to return items from an order.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "orderId": { "type": "string" },
+        "items": { "type": "array", "items": { "$ref": "#/entities/ReturnItem" } },
+        "reason": { "type": "string" },
+        "status": { "type": "string", "enum": ["Pending Approval", "Approved", "Shipped by you", "Received", "Completed", "Rejected"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "orderId", "items", "reason", "status", "createdAt"]
+    },
+    "LoyaltyPointEntry": {
+      "title": "Loyalty Point Entry",
+      "description": "Represents a single transaction in a user's loyalty points history.",
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "description": {
+          "type": "string"
+        },
+        "points": {
+          "type": "number"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["earn", "redeem"]
+        }
+      },
+      "required": ["date", "description", "points", "type"]
+    },
+    "Reward": {
+      "title": "Loyalty Reward",
+      "description": "Represents a reward that can be redeemed with loyalty points.",
+      "type": "object",
+      "properties": {
+        "points": {
+          "type": "number"
+        },
+        "reward": {
+          "type": "string"
+        },
+        "iconName": {
+          "type": "string"
+        }
+      },
+      "required": ["points", "reward", "iconName"]
+    },
+    "Voucher": {
+      "title": "User Voucher",
+      "description": "Represents a voucher or coupon redeemed by a user using loyalty points.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "rewardId": { "type": "string" },
+        "rewardDescription": { "type": "string" },
+        "code": { "type": "string", "description": "The unique voucher code." },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "expiresAt": { "type": "string", "format": "date-time" },
+        "isUsed": { "type": "boolean", "default": false }
+      },
+      "required": ["userId", "rewardId", "rewardDescription", "code", "createdAt"]
+    },
+    "UserNotificationSettings": {
+      "title": "User Notification Settings",
+      "description": "Represents a user's notification preferences.",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "object",
+          "properties": {
+            "promotionalOffers": { "type": "boolean" },
+            "newProducts": { "type": "boolean" },
+            "newsletter": { "type": "boolean" }
+          }
+        },
+        "push": {
+          "type": "object",
+          "properties": {
+            "orderStatus": { "type": "boolean" },
+            "promotionalOffers": { "type": "boolean" }
+          }
+        }
+      }
+    }
+  },
+  "auth": {
+    "providers": ["email_password", "google.com"]
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/UserProfile"
+      },
+      "description": "Stores public user profile information."
+    },
+    "/products/{productId}": {
+      "schema": {
+        "$ref": "#/entities/Product"
+      },
+      "description": "Stores all product information."
+    },
+    "/products/{productId}/reviews/{reviewId}": {
+        "schema": { "$ref": "#/entities/Review" },
+        "description": "Stores user reviews for a specific product."
+    },
+    "/categories/{categoryId}": {
+      "schema": {
+        "$ref": "#/entities/Category"
+      },
+      "description": "Stores all category information, including structure for mega menus."
+    },
+    "/brands/{brandId}": {
+      "schema": {
+        "$ref": "#/entities/Brand"
+      },
+      "description": "Stores all product brands."
+    },
+    "/deals/{dealId}": {
+        "schema": {
+            "$ref": "#/entities/Deal"
+        },
+        "description": "Stores all promotional deal information."
+    },
+    "/orders/{orderId}": {
+      "schema": { "$ref": "#/entities/Order" },
+      "description": "Stores all customer orders."
+    },
+    "/users/{userId}/addresses/{addressId}": {
+      "schema": { "$ref": "#/entities/UserAddress" },
+      "description": "Stores a user's addresses."
+    },
+    "/users/{userId}/paymentMethods/{paymentMethodId}": {
+      "schema": { "$ref": "#/entities/UserPaymentMethod" },
+      "description": "Stores a user's payment methods."
+    },
+    "/users/{userId}/wishlist/{wishlistItemId}": {
+      "schema": { "$ref": "#/entities/UserWishlistItem" },
+      "description": "Stores a user's wishlist items."
+    },
+    "/users/{userId}/cart/{cartItemId}": {
+      "schema": { "$ref": "#/entities/CartItem" },
+      "description": "Stores items in a user's shopping cart."
+    },
+    "/users/{userId}/returns/{returnId}": {
+      "schema": { "$ref": "#/entities/ReturnRequest" },
+      "description": "Stores a user's return requests."
+    },
+    "/users/{userId}/loyaltyPoints/{loyaltyPointId}": {
+      "schema": {
+        "$ref": "#/entities/LoyaltyPointEntry"
+      },
+      "description": "Stores a user's loyalty point history."
+    },
+    "/users/{userId}/vouchers/{voucherId}": {
+      "schema": { "$ref": "#/entities/Voucher" },
+      "description": "Stores vouchers redeemed by a user."
+    },
+    "/users/{userId}/settings/notifications": {
+      "schema": {
+        "$ref": "#/entities/UserNotificationSettings"
+      },
+      "description": "Stores a user's notification preferences."
+    },
+    "/rewards/{rewardId}": {
+      "schema": {
+        "$ref": "#/entities/Reward"
+      },
+      "description": "Stores all available loyalty rewards."
+    },
+    "/settings/site": {
+        "schema": { "$ref": "#/entities/SiteSettings" },
+        "description": "Stores global site settings in a single document."
+    }
+  }
+}

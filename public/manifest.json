@@ -1,0 +1,18 @@
+{
+  "name": "AVERzO - Unified Shopping Experience",
+  "short_name": "Averzo",
+  "description": "AVERzO is a next-generation Omnichannel Super Marketplace designed to bridge the gap between online and offline retail.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f6f6f6",
+  "theme_color": "#FF4747",
+  "icons": [
+    {
+      "src": "/icons/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

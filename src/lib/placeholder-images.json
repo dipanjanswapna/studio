@@ -1,34 +1,142 @@
 {
   "placeholderImages": [
     {
-      "id": "hero-image",
-      "description": "Dr. Monisha Chakraborty addressing a crowd",
-      "imageUrl": "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxmZW1hbGUlMjBsZWFkZXJ8ZW58MHx8fHwxNzcwMDE0NTM0fDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "female leader"
+      "id": "hero-1",
+      "description": "A vibrant scene of people shopping in a modern retail environment.",
+      "imageUrl": "https://images.unsplash.com/photo-1652249418530-f5efa38f9d06?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxmYXNoaW9uJTIwc2FsZXxlbnwwfHx8fDE3Njk1ODUyNzh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "fashion sale"
     },
     {
-      "id": "about-image",
-      "description": "Dr. Monisha Chakraborty providing medical care to a community member",
-      "imageUrl": "https://images.unsplash.com/photo-1634839593004-667d278bac49?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjb21tdW5pdHklMjBoZWxwfGVufDB8fHx8MTc3MDAxNDUzNHww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "community help"
+      "id": "product-1",
+      "description": "A stylish and comfortable men's graphic t-shirt.",
+      "imageUrl": "https://images.unsplash.com/photo-1511500587571-7b710abffba7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8dC1zaGlydCUyMGZhc2hpb258ZW58MHx8fHwxNzY5NTY4Mjk1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "t-shirt fashion"
     },
     {
-      "id": "update-1",
-      "description": "A campaign rally in Barishal",
-      "imageUrl": "https://images.unsplash.com/photo-1767327926575-e70fda712917?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8cG9saXRpY2FsJTIwcmFsbHl8ZW58MHx8fHwxNzcwMDE0NTM0fDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "political rally"
+      "id": "product-2",
+      "description": "Modern wireless headphones with noise-cancellation.",
+      "imageUrl": "https://images.unsplash.com/photo-1612465289702-7c84b5258fde?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHx3aXJlbGVzcyUyMGhlYWRwaG9uZXN8ZW58MHx8fHwxNzY5NTM2MjI5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "wireless headphones"
     },
     {
-      "id": "update-2",
-      "description": "Dr. Monisha meeting with local leaders",
-      "imageUrl": "https://images.unsplash.com/photo-1515187029135-18ee286d815b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjb21tdW5pdHklMjBtZWV0aW5nfGVufDB8fHx8MTc2OTk5MTY0N3ww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "community meeting"
+      "id": "product-3",
+      "description": "A sleek and powerful smartphone with a high-resolution display.",
+      "imageUrl": "https://images.unsplash.com/photo-1760655487414-458e27965e89?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxzbWFydHBob25lJTIwdGVjaG5vbG9neXxlbnwwfHx8fDE3Njk1Njc4MjV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "smartphone technology"
     },
     {
-      "id": "update-3",
-      "description": "Volunteers distributing campaign materials",
-      "imageUrl": "https://images.unsplash.com/photo-1645937744052-53e4e2d39c5d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxwb2xpdGljYWwlMjB2b2x1bnRlZXJzfGVufDB8fHx8MTc3MDAxNDUzNHww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "political volunteers"
+      "id": "product-3-silver",
+      "description": "A sleek and powerful smartphone in silver.",
+      "imageUrl": "https://images.unsplash.com/photo-1592225358385-d6e3c09f3d9d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxzbWFydHBob25lJTIwc2lsdmVyfGVufDB8fHx8MTc3MDA3NzU1Mnww&ixlib=rb-4.0.3&q=80&w=1080",
+      "imageHint": "silver smartphone"
+    },
+    {
+      "id": "product-3-gray",
+      "description": "A sleek and powerful smartphone in space gray.",
+      "imageUrl": "https://images.unsplash.com/photo-1598327106026-d9521da673d1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzcGFjZSUyMGdyYXklMjBzbWFydHBob25lfGVufDB8fHx8MTc3MDA3NzU4N3ww&ixlib=rb-4.0.3&q=80&w=1080",
+      "imageHint": "gray smartphone"
+    },
+    {
+      "id": "product-3-gray-angle",
+      "description": "A sleek and powerful smartphone in space gray, side view.",
+      "imageUrl": "https://images.unsplash.com/photo-1598327105666-0b170a50d2d3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzcGFjZSUyMGdyYXklMjBzbWFydHBob25lfGVufDB8fHx8MTc3MDA3NzU4N3ww&ixlib=rb-4.0.3&q=80&w=1080",
+      "imageHint": "gray smartphone"
+    },
+    {
+      "id": "product-3-silver-angle",
+      "description": "A sleek and powerful smartphone in silver, back view.",
+      "imageUrl": "https://images.unsplash.com/photo-1512499617640-c74ae3a79d37?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxzbWFydHBob25lJTIwc2lsdmVyfGVufDB8fHx8MTc3MDA3NzU1Mnww&ixlib=rb-4.0.3&q=80&w=1080",
+      "imageHint": "silver smartphone"
+    },
+    {
+      "id": "product-3-camera",
+      "description": "A closeup of the smartphone's camera system.",
+      "imageUrl": "https://images.unsplash.com/photo-1604280591238-33611b8a4a4b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxzbWFydHBob25lJTIwY2FtZXJhfGVufDB8fHx8MTc3MDE1OTY4Nnww&ixlib=rb-4.0.3&q=80&w=1080",
+      "imageHint": "smartphone camera"
+    },
+    {
+      "id": "product-4",
+      "description": "A classic leather wallet with multiple compartments.",
+      "imageUrl": "https://images.unsplash.com/photo-1628483211662-9bcc692c46dc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxsZWF0aGVyJTIwd2FsbGV0fGVufDB8fHx8MTc2OTU2MzQxOHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "leather wallet"
+    },
+    {
+      "id": "product-5",
+      "description": "A pair of fashionable sunglasses for sun protection.",
+      "imageUrl": "https://images.unsplash.com/photo-1759227922040-0ca4d3cbe42e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxzdW5nbGFzc2VzJTIwZmFzaGlvbnxlbnwwfHx8fDE3Njk1NjgxMDN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "sunglasses fashion"
+    },
+    {
+      "id": "product-6",
+      "description": "A durable and spacious backpack for travel or daily use.",
+      "imageUrl": "https://images.unsplash.com/photo-1689828615239-8310767d670b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx0cmF2ZWwlMjBiYWNrcGFja3xlbnwwfHx8fDE3Njk2MTA0MDR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "travel backpack"
+    },
+    {
+      "id": "product-7",
+      "description": "A set of organic skincare products for a healthy glow.",
+      "imageUrl": "https://images.unsplash.com/photo-1567721913486-6585f069b332?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxza2luY2FyZSUyMHByb2R1Y3RzfGVufDB8fHx8MTc2OTU4MDgwNHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "skincare products"
+    },
+    {
+      "id": "product-8",
+      "description": "A professional-grade digital camera for photography enthusiasts.",
+      "imageUrl": "https://images.unsplash.com/photo-1599664223843-9349c75196bc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxkaWdpdGFsJTIwY2FtZXJhfGVufDB8fHx8MTc2OTUzNjIyOXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "digital camera"
+    },
+    {
+      "id": "hero-main-1",
+      "description": "Innovation expo banner showing new technology.",
+      "imageUrl": "https://images.unsplash.com/photo-1761195689615-9469b65dac01?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8dGVjaG5vbG9neSUyMGV4cG98ZW58MHx8fHwxNzY5NjU5MzYyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "technology expo"
+    },
+    {
+      "id": "hero-main-2",
+      "description": "A vibrant banner for a fashion sale.",
+      "imageUrl": "https://images.unsplash.com/photo-1580828343064-fde4fc206bc6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxmYXNoaW9uJTIwc2FsZXxlbnwwfHx8fDE3Njk1ODUyNzh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "fashion sale"
+    },
+    {
+      "id": "hero-main-3",
+      "description": "A man wearing sunglasses in a promotional banner.",
+      "imageUrl": "https://i.postimg.cc/kM1v7CVw/portrait-man-wearing-sunglasses.jpg",
+      "imageHint": "sunglasses fashion"
+    },
+    {
+      "id": "hero-side-1",
+      "description": "A delivery person holding a package with a truck in the background.",
+      "imageUrl": "https://images.unsplash.com/photo-1758523670564-d1d6a734dc0b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxvbmxpbmUlMjBkZWxpdmVyeXxlbnwwfHx8fDE3Njk2NTkzNjJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "online delivery"
+    },
+    {
+      "id": "hero-side-2",
+      "description": "High-performance DDR5 gaming desktop RAM sticks.",
+      "imageUrl": "https://images.unsplash.com/photo-1617119895969-f4ea56f5538b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxnYW1pbmclMjByYW18ZW58MHx8fHwxNzY5NjU5MzYyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "gaming ram"
+    },
+    {
+      "id": "product-generic-medicine",
+      "description": "A strip of medicine tablets.",
+      "imageUrl": "https://images.unsplash.com/photo-1622147459102-8a0f3727e4c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxtZWRpY2luZSUyMHRhYmxldHN8ZW58MHx8fHwxNzY5NzE0NjM2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "medicine tablets"
+    },
+    {
+      "id": "product-generic-rice",
+      "description": "A bag of rice.",
+      "imageUrl": "https://images.unsplash.com/photo-1722893960889-5f2d88ce6524?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxiYWclMjByaWNlfGVufDB8fHx8MTc2OTcwMjY2OHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "bag rice"
+    },
+    {
+      "id": "hero-mobile-banner",
+      "description": "A promotional banner for gadgets including a smartwatch, power bank, and earbuds.",
+      "imageUrl": "https://images.unsplash.com/photo-1765805911153-cdd178d74515?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxnYWRnZXQlMjBwcm9tb3Rpb258ZW58MHx8fHwxNzY5NzcyMDE2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "gadget promotion"
+    },
+    {
+      "id": "promo-banner-1",
+      "description": "A promotional banner for beauty products.",
+      "imageUrl": "https://images.unsplash.com/photo-1723150512429-bfa92988d845?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxtYWtldXAlMjBiZWF1dHl8ZW58MHx8fHwxNzY5NzEzNjY5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "makeup beauty"
     }
   ]
 }

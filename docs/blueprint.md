@@ -1,23 +1,19 @@
-# **App Name**: Monisha's Mandate
+# **App Name**: Averzo
 
 ## Core Features:
 
-- Candidate Profile: Showcase Dr. Monisha Chakraborty's profile, background, and accomplishments.
-- Election Updates: Provide real-time updates on the election campaign and results.
-- Volunteer Sign-Up: Allow supporters to sign up as volunteers for the campaign.
-- Donation Platform: Enable supporters to make donations to the campaign.
-- AI-Powered Q&A: Implement a tool that answers questions about Dr. Chakraborty’s policies, using provided text as context to inform the answers.
-- Code Documentation: Ensure system functionalities with thorough code documentation and commenting.
-- Routing Optimization: Optimize website routing to improve code structure and navigation.
+- Personalized Product Recommendations: AI tool suggesting products based on user purchase history and browsing behavior.
+- QR Code Product Lookup: Scan QR codes in-store to view product details and reviews.
+- Omnichannel Cart Synchronization: Sync the cart across the PWA and physical stores.
+- Role-Based Access Control (RBAC): Secure the app with RBAC for admin, vendor, and customer roles.
 
 ## Style Guidelines:
 
-- Primary color: Forest Green (#228B22) to represent growth, health, and Dr. Chakraborty's commitment to the community.
-- Background color: Light Green (#F0FFF0), a very desaturated tint of forest green, creating a clean and calming backdrop.
-- Accent color: Firebrick Red (#B22222) to highlight calls to action, and important information with an energetic feel.
-- Headline font: 'Li Shadhinata 2.0 Unicode', to connect to a feeling of patriotism and liberty.
-- Body font: 'Hind Siliguri', a humanist sans-serif font, which promotes readability and approachability.
-- Employ a responsive layout using Flexbox with features like flex wrap, grow/shrink, and centering to ensure optimal viewing across all devices (mobile, tablet, desktop).
-- Ensure a minimum card width of 280px to prevent overly narrow cards, and use flex-1 to distribute cards evenly in available space.
-- Utilize Tailwind's responsive classes (e.g., px-4 md:p-8 or flex-1 sm:flex-none) to adjust padding and flexibility based on screen size.
-- Incorporate subtle animations to enhance user experience, especially when providing election updates.
+- Primary color: Saturated red (#FF4747), suggesting energy and action, is ideal for attracting attention to key interactive elements. In RGB, it is equivalent to text-red-500 and bg-red-500 in Tailwind.
+- Background color: Light gray (#f6f6f6), nearly white. Its lightness avoids distracting from the interface while still differentiating the various regions of the display. In RGB, this is equivalent to bg-gray-100 in Tailwind.
+- Accent color: Very dark gray (#242424) for text elements that need to have very high contrast in the light color scheme. It also brings a sense of sophistication and precision. In RGB, this is equivalent to text-gray-900 in Tailwind.
+- Font: 'Inter' (sans-serif) for UI and titles.
+- Font weights: 400 (Regular), 500 (Medium), 600 (Semi-bold), 700 (Bold).
+- Modern, flat design icons in primary red.
+- Responsive design with adaptive layouts for mobile, tablet, and desktop.
+- Subtle animations and transitions for a smooth user experience.
