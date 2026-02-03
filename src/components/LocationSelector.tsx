@@ -1,6 +1,6 @@
 'use client';
-import { useState, useEffect, useMemo, useRef } from 'react';
-import { MapContainer, TileLayer, Marker, useMap, useMapEvents } from 'react-leaflet';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 import type { Marker as LeafletMarker } from 'leaflet';
 import L from 'leaflet';
@@ -24,63 +24,73 @@ interface LocationSelectorProps {
   initialPosition?: [number, number];
 }
 
-// This component will handle all map interactions
-function MapInteractionController({ setPosition }: { setPosition: (pos: L.LatLng) => void }) {
-    const map = useMap();
-
-    // Handle search
-    useEffect(() => {
-        const provider = new OpenStreetMapProvider();
-        const searchControl = new GeoSearchControl({
-            provider,
-            style: 'bar',
-            showMarker: false, // We'll manage our own marker
-            autoClose: true,
-        });
-
-        map.addControl(searchControl);
-
-        const onShowLocation = (e: any) => {
-            setPosition(L.latLng(e.location.y, e.location.x));
-            map.flyTo([e.location.y, e.location.x], 15);
-        };
-        
-        map.on('geosearch/showlocation', onShowLocation);
-
-        return () => {
-            map.removeControl(searchControl);
-            map.off('geosearch/showlocation', onShowLocation);
-        };
-    }, [map, setPosition]);
-
-    // Handle map clicks
-    useMapEvents({
-        click(e) {
-            setPosition(e.latlng);
-            map.flyTo(e.latlng, map.getZoom());
-        },
-    });
-
-    return null;
-}
-
-export function LocationSelector({ onLocationSelect, initialPosition }: LocationSelectorProps) {
-  const [position, setPosition] = useState<L.LatLng | null>(initialPosition ? L.latLng(initialPosition[0], initialPosition[1]) : null);
+function MapController({ onLocationSelect, initialPosition }: { onLocationSelect: (location: LocationData) => void; initialPosition?: [number, number] }) {
+  const map = useMap();
+  const [position, setPosition] = useState<L.LatLng | null>(() => initialPosition ? L.latLng(initialPosition[0], initialPosition[1]) : null);
   const markerRef = useRef<LeafletMarker>(null);
+  const isDragging = useRef(false);
 
-  const eventHandlers = useMemo(() => ({
+  useEffect(() => {
+    if(initialPosition && !position) {
+        const initialLatLng = L.latLng(initialPosition[0], initialPosition[1]);
+        setPosition(initialLatLng);
+        map.flyTo(initialLatLng, 15);
+    }
+  }, [initialPosition, position, map]);
+
+
+  // Add search control
+  useEffect(() => {
+    const provider = new OpenStreetMapProvider();
+    const searchControl = new (GeoSearchControl as any)({
+      provider,
+      style: 'bar',
+      showMarker: false,
+      autoClose: true,
+    });
+    map.addControl(searchControl);
+    
+    const onResult = (e: any) => {
+        const newPos = L.latLng(e.location.y, e.location.x);
+        setPosition(newPos);
+        map.flyTo(newPos, 15);
+    }
+    map.on('geosearch/showlocation', onResult);
+
+    return () => {
+        map.removeControl(searchControl)
+        map.off('geosearch/showlocation', onResult);
+    };
+  }, [map]);
+
+  // Handle map clicks
+  useEffect(() => {
+    const onClick = (e: L.LeafletMouseEvent) => {
+      if(!isDragging.current) {
+        setPosition(e.latlng);
+        map.flyTo(e.latlng, map.getZoom());
+      }
+    }
+    map.on('click', onClick);
+    return () => { map.off('click', onClick) };
+  }, [map]);
+
+  const markerEventHandlers = useMemo(() => ({
+    dragstart: () => {
+        isDragging.current = true;
+    },
     dragend() {
       const marker = markerRef.current;
-      if (marker != null) {
+      if (marker) {
         setPosition(marker.getLatLng());
       }
+      setTimeout(() => { isDragging.current = false; }, 50);
     },
   }), []);
 
   // Reverse geocode when position changes
   useEffect(() => {
     if (!position) return;
-    
     const provider = new OpenStreetMapProvider();
     const reverseGeocode = async () => {
       try {
@@ -103,24 +113,33 @@ export function LocationSelector({ onLocationSelect, initialPosition }: Location
     reverseGeocode();
   }, [position, onLocationSelect]);
 
-  const mapCenter = position ? [position.lat, position.lng] : initialPosition || [23.8103, 90.4125];
+
+  return position ? (
+    <Marker
+      ref={markerRef}
+      position={position}
+      draggable={true}
+      eventHandlers={markerEventHandlers}
+    />
+  ) : null;
+}
+
+export function LocationSelector({ onLocationSelect, initialPosition }: LocationSelectorProps) {
+  const mapCenter: [number, number] = initialPosition || [23.8103, 90.4125];
 
   return (
     <div className="h-96 w-full rounded-lg overflow-hidden relative">
-      <MapContainer center={mapCenter} zoom={13} scrollWheelZoom={true} style={{ height: '100%', width: '100%' }}>
+      <MapContainer
+        center={mapCenter}
+        zoom={13}
+        scrollWheelZoom={true}
+        style={{ height: '100%', width: '100%' }}
+      >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {position && (
-            <Marker 
-              draggable={true} 
-              eventHandlers={eventHandlers} 
-              position={position} 
-              ref={markerRef}
-            />
-        )}
-        <MapInteractionController setPosition={setPosition} />
+        <MapController onLocationSelect={onLocationSelect} initialPosition={initialPosition} />
       </MapContainer>
     </div>
   );
