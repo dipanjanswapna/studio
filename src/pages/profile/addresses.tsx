@@ -36,17 +36,6 @@ export type Address = {
     longitude?: number;
 };
 
-// Fix for default Leaflet icon issue with webpack
-const leafletIcon = L.icon({
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41]
-});
-
 const mapContainerStyle = {
   width: '100%',
   height: '100%',
@@ -56,6 +45,17 @@ const mapContainerStyle = {
 const defaultCenter: [number, number] = [23.8103, 90.4125];
 
 function AddressMap({ addresses }: { addresses: Address[] }) {
+    // Fix for default Leaflet icon issue with webpack
+    const leafletIcon = L.icon({
+        iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+        iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+        shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+    
     const mapCenter = useMemo(() => {
         const validAddresses = addresses.filter(a => a.latitude && a.longitude);
         if (validAddresses.length > 0) {
