@@ -16,7 +16,7 @@ import { getFirestore, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
 
-export type UserRole = "ADMIN" | "VENDOR" | "OUTLET" | "STAFF" | "CUSTOMER";
+export type UserRole = "ADMIN" | "VENDOR" | "OUTLET" | "STAFF" | "CUSTOMER" | "B2B_CUSTOMER";
 
 export interface User {
   uid: string;
@@ -29,6 +29,8 @@ export interface User {
   gender?: 'male' | 'female' | 'other';
   membershipId?: string;
   membershipTier?: "Gold" | "Platinum" | "Diamond";
+  companyName?: string;
+  vatNumber?: string;
   storeDescription?: string;
   outletAddress?: string;
   bankName?: string;
@@ -63,6 +65,7 @@ const redirectByRole = (role: UserRole, router: any) => {
     case "STAFF":
       router.push("/portal/staff");
       break;
+    case "B2B_CUSTOMER":
     case "CUSTOMER":
     default:
       router.push("/profile");

@@ -48,7 +48,7 @@
         },
         "role": {
           "type": "string",
-          "enum": ["ADMIN", "VENDOR", "OUTLET", "STAFF", "CUSTOMER"],
+          "enum": ["ADMIN", "VENDOR", "OUTLET", "STAFF", "CUSTOMER", "B2B_CUSTOMER"],
           "description": "The user's role in the system."
         },
         "dob": {
@@ -69,6 +69,14 @@
             "type": "string",
             "enum": ["Gold", "Platinum", "Diamond"],
             "description": "The user's membership tier."
+        },
+        "companyName": {
+            "type": "string",
+            "description": "The name of the B2B customer's company."
+        },
+        "vatNumber": {
+            "type": "string",
+            "description": "The VAT or tax identification number for the B2B customer."
         },
         "storeDescription": {
             "type": "string",

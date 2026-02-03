@@ -25,7 +25,7 @@ const adminNavItems: NavItem[] = [
   { href: "/portal/admin/vendors", label: "Vendors", icon: Building2 },
   { href: "/portal/admin/users", label: "Users", icon: Users2 },
   { href: "/portal/admin/finance", label: "Finance", icon: Banknote },
-  { href: "/portal/admin/b2b", label: "B2B", icon: Briefcase },
+  { href: "/portal/admin/b2b", label: "B2B Clients", icon: Briefcase },
   { href: "/portal/admin/support", label: "Support", icon: LifeBuoy },
   { href: "/portal/admin/settings", label: "Settings", icon: Settings },
 ];

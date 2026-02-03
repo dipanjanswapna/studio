@@ -21,7 +21,17 @@ const userSchema = z.object({
   name: z.string().min(2, 'Name is required.'),
   email: z.string().email(),
   phone: z.string().optional(),
-  role: z.enum(['ADMIN', 'VENDOR', 'OUTLET', 'STAFF', 'CUSTOMER']),
+  role: z.enum(['ADMIN', 'VENDOR', 'OUTLET', 'STAFF', 'CUSTOMER', 'B2B_CUSTOMER']),
+  companyName: z.string().optional(),
+  vatNumber: z.string().optional(),
+}).refine(data => {
+    if (data.role === 'B2B_CUSTOMER') {
+        return !!data.companyName && data.companyName.length > 0;
+    }
+    return true;
+}, {
+    message: "Company name is required for B2B Clients.",
+    path: ["companyName"],
 });
 
 type UserFormValues = z.infer<typeof userSchema>;
@@ -34,7 +44,7 @@ interface UserModalProps {
   defaultRoleForCreate?: UserRole;
 }
 
-const ROLES: UserRole[] = ['ADMIN', 'VENDOR', 'OUTLET', 'STAFF', 'CUSTOMER'];
+const ROLES: UserRole[] = ['ADMIN', 'VENDOR', 'OUTLET', 'STAFF', 'CUSTOMER', 'B2B_CUSTOMER'];
 
 export function UserModal({ isOpen, onClose, onSave, userToEdit, defaultRoleForCreate = 'CUSTOMER' }: UserModalProps) {
   const form = useForm<UserFormValues>({
@@ -44,6 +54,8 @@ export function UserModal({ isOpen, onClose, onSave, userToEdit, defaultRoleForC
       email: '',
       phone: '',
       role: defaultRoleForCreate,
+      companyName: '',
+      vatNumber: '',
     },
   });
 
@@ -55,6 +67,8 @@ export function UserModal({ isOpen, onClose, onSave, userToEdit, defaultRoleForC
                 email: userToEdit.email || '',
                 phone: userToEdit.phone || '',
                 role: userToEdit.role,
+                companyName: userToEdit.companyName || '',
+                vatNumber: userToEdit.vatNumber || '',
             });
         } else {
             form.reset({
@@ -62,6 +76,8 @@ export function UserModal({ isOpen, onClose, onSave, userToEdit, defaultRoleForC
                 email: '',
                 phone: '',
                 role: defaultRoleForCreate,
+                companyName: '',
+                vatNumber: '',
             });
         }
     }
@@ -71,6 +87,8 @@ export function UserModal({ isOpen, onClose, onSave, userToEdit, defaultRoleForC
     onSave(data, userToEdit?.uid);
     onClose();
   };
+  
+  const role = form.watch('role');
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
@@ -107,7 +125,7 @@ export function UserModal({ isOpen, onClose, onSave, userToEdit, defaultRoleForC
                           </FormControl>
                           <SelectContent>
                             {ROLES.map(role => (
-                                <SelectItem key={role} value={role}>{role}</SelectItem>
+                                <SelectItem key={role} value={role}>{role.replace('_', ' ')}</SelectItem>
                             ))}
                           </SelectContent>
                         </Select>
@@ -116,6 +134,16 @@ export function UserModal({ isOpen, onClose, onSave, userToEdit, defaultRoleForC
                     )}
                   />
             </div>
+            {role === 'B2B_CUSTOMER' && (
+                <>
+                    <FormField control={form.control} name="companyName" render={({ field }) => (
+                        <FormItem><FormLabel>Company Name</FormLabel><FormControl><Input placeholder="e.g., Averzo Inc." {...field} /></FormControl><FormMessage /></FormItem>
+                    )} />
+                     <FormField control={form.control} name="vatNumber" render={({ field }) => (
+                        <FormItem><FormLabel>VAT Number (Optional)</FormLabel><FormControl><Input placeholder="Enter VAT/TIN" {...field} /></FormControl><FormMessage /></FormItem>
+                    )} />
+                </>
+            )}
             <DialogFooter>
               <Button type="button" variant="outline" onClick={onClose}>Cancel</Button>
               <Button type="submit">Save User</Button>
