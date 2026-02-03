@@ -24,6 +24,8 @@ const addressSchema = z.object({
   city: z.string().min(2, 'City is required.'),
   phone: z.string().min(11, 'A valid 11-digit phone number is required.'),
   isDefault: z.boolean().default(false),
+  latitude: z.coerce.number().optional(),
+  longitude: z.coerce.number().optional(),
 });
 
 type AddressFormValues = z.infer<typeof addressSchema>;
@@ -45,21 +47,31 @@ export function AddressModal({ isOpen, onClose, onSave, addressToEdit }: Address
       city: '',
       phone: '',
       isDefault: false,
+      latitude: undefined,
+      longitude: undefined,
     },
   });
 
   useEffect(() => {
-    if (addressToEdit) {
-      form.reset(addressToEdit);
-    } else {
-      form.reset({
-        type: 'Home',
-        name: '',
-        address: '',
-        city: '',
-        phone: '',
-        isDefault: false,
-      });
+    if (isOpen) {
+        if (addressToEdit) {
+          form.reset({
+            ...addressToEdit,
+            latitude: addressToEdit.latitude ?? undefined,
+            longitude: addressToEdit.longitude ?? undefined,
+          });
+        } else {
+          form.reset({
+            type: 'Home',
+            name: '',
+            address: '',
+            city: '',
+            phone: '',
+            isDefault: false,
+            latitude: undefined,
+            longitude: undefined,
+          });
+        }
     }
   }, [addressToEdit, form, isOpen]);
 
@@ -118,6 +130,14 @@ export function AddressModal({ isOpen, onClose, onSave, addressToEdit }: Address
               <FormField control={form.control} name="city" render={({ field }) => (
                   <FormItem><FormLabel>City / District</FormLabel><FormControl><Input placeholder="Dhaka - 1205" {...field} /></FormControl><FormMessage /></FormItem>
               )} />
+              <div className="grid grid-cols-2 gap-4">
+                <FormField control={form.control} name="latitude" render={({ field }) => (
+                    <FormItem><FormLabel>Latitude (Optional)</FormLabel><FormControl><Input type="number" step="any" placeholder="e.g. 23.777176" {...field} onChange={event => field.onChange(+event.target.value)} /></FormControl><FormMessage /></FormItem>
+                )} />
+                <FormField control={form.control} name="longitude" render={({ field }) => (
+                    <FormItem><FormLabel>Longitude (Optional)</FormLabel><FormControl><Input type="number" step="any" placeholder="e.g. 90.399452" {...field} onChange={event => field.onChange(+event.target.value)} /></FormControl><FormMessage /></FormItem>
+                )} />
+              </div>
                <FormField
                 control={form.control}
                 name="isDefault"
