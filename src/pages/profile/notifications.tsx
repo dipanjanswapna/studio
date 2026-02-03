@@ -2,7 +2,6 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { ProfileLayout } from '@/components/layouts/ProfileLayout';
 import { motion } from 'framer-motion';
 import { Tag, Package, Newspaper, Mail, Bell, Truck } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
@@ -121,66 +120,64 @@ export default function NotificationsPage() {
     );
 
     return (
-        <ProfileLayout>
-            <motion.div variants={itemVariants}>
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Notification Settings</CardTitle>
-                        <CardDescription>Choose how and what you want to be notified about.</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                       {loading || !settings ? renderSkeleton() : (
-                         <div className="space-y-6">
-                            <div>
-                                <h4 className="font-medium text-lg mb-4">By Content</h4>
-                                <div className="space-y-4">
-                                    <div className="flex items-center justify-between p-4 rounded-lg border bg-secondary/30">
-                                        <div className="flex items-center gap-4">
-                                            <Tag className="w-5 h-5 text-muted-foreground" />
-                                            <div>
-                                                <Label htmlFor="promo-offers" className="font-semibold cursor-pointer">Email - Promotional Offers</Label>
-                                                <p className="text-sm text-muted-foreground">Receive special deals and discounts.</p>
-                                            </div>
+        <motion.div variants={itemVariants}>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Notification Settings</CardTitle>
+                    <CardDescription>Choose how and what you want to be notified about.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                   {loading || !settings ? renderSkeleton() : (
+                     <div className="space-y-6">
+                        <div>
+                            <h4 className="font-medium text-lg mb-4">By Content</h4>
+                            <div className="space-y-4">
+                                <div className="flex items-center justify-between p-4 rounded-lg border bg-secondary/30">
+                                    <div className="flex items-center gap-4">
+                                        <Tag className="w-5 h-5 text-muted-foreground" />
+                                        <div>
+                                            <Label htmlFor="promo-offers" className="font-semibold cursor-pointer">Email - Promotional Offers</Label>
+                                            <p className="text-sm text-muted-foreground">Receive special deals and discounts.</p>
                                         </div>
-                                        <Switch id="promo-offers" checked={settings.email.promotionalOffers} onCheckedChange={(c) => handleSettingChange('email', 'promotionalOffers', c)} />
                                     </div>
-                                    <div className="flex items-center justify-between p-4 rounded-lg border bg-secondary/30">
-                                        <div className="flex items-center gap-4">
-                                            <Package className="w-5 h-5 text-muted-foreground" />
-                                            <div>
-                                                <Label htmlFor="new-products" className="font-semibold cursor-pointer">Email - New Product Announcements</Label>
-                                                <p className="text-sm text-muted-foreground">Be the first to know about new arrivals.</p>
-                                            </div>
+                                    <Switch id="promo-offers" checked={settings.email.promotionalOffers} onCheckedChange={(c) => handleSettingChange('email', 'promotionalOffers', c)} />
+                                </div>
+                                <div className="flex items-center justify-between p-4 rounded-lg border bg-secondary/30">
+                                    <div className="flex items-center gap-4">
+                                        <Package className="w-5 h-5 text-muted-foreground" />
+                                        <div>
+                                            <Label htmlFor="new-products" className="font-semibold cursor-pointer">Email - New Product Announcements</Label>
+                                            <p className="text-sm text-muted-foreground">Be the first to know about new arrivals.</p>
                                         </div>
-                                        <Switch id="new-products" checked={settings.email.newProducts} onCheckedChange={(c) => handleSettingChange('email', 'newProducts', c)} />
                                     </div>
-                                    <div className="flex items-center justify-between p-4 rounded-lg border bg-secondary/30">
-                                        <div className="flex items-center gap-4">
-                                            <Newspaper className="w-5 h-5 text-muted-foreground" />
-                                            <div>
-                                                <Label htmlFor="newsletter" className="font-semibold cursor-pointer">Email - Weekly Newsletter</Label>
-                                                <p className="text-sm text-muted-foreground">Get our weekly roundup of top products and articles.</p>
-                                            </div>
+                                    <Switch id="new-products" checked={settings.email.newProducts} onCheckedChange={(c) => handleSettingChange('email', 'newProducts', c)} />
+                                </div>
+                                <div className="flex items-center justify-between p-4 rounded-lg border bg-secondary/30">
+                                    <div className="flex items-center gap-4">
+                                        <Newspaper className="w-5 h-5 text-muted-foreground" />
+                                        <div>
+                                            <Label htmlFor="newsletter" className="font-semibold cursor-pointer">Email - Weekly Newsletter</Label>
+                                            <p className="text-sm text-muted-foreground">Get our weekly roundup of top products and articles.</p>
                                         </div>
-                                        <Switch id="newsletter" checked={settings.email.newsletter} onCheckedChange={(c) => handleSettingChange('email', 'newsletter', c)} />
                                     </div>
-                                    <div className="flex items-center justify-between p-4 rounded-lg border bg-secondary/30">
-                                        <div className="flex items-center gap-4">
-                                            <Truck className="w-5 h-5 text-muted-foreground" />
-                                            <div>
-                                                <Label htmlFor="order-status" className="font-semibold cursor-pointer">Push - Order Status Updates</Label>
-                                                <p className="text-sm text-muted-foreground">Get push notifications about your order status.</p>
-                                            </div>
+                                    <Switch id="newsletter" checked={settings.email.newsletter} onCheckedChange={(c) => handleSettingChange('email', 'newsletter', c)} />
+                                </div>
+                                <div className="flex items-center justify-between p-4 rounded-lg border bg-secondary/30">
+                                    <div className="flex items-center gap-4">
+                                        <Truck className="w-5 h-5 text-muted-foreground" />
+                                        <div>
+                                            <Label htmlFor="order-status" className="font-semibold cursor-pointer">Push - Order Status Updates</Label>
+                                            <p className="text-sm text-muted-foreground">Get push notifications about your order status.</p>
                                         </div>
-                                        <Switch id="order-status" checked={settings.push.orderStatus} onCheckedChange={(c) => handleSettingChange('push', 'orderStatus', c)} />
                                     </div>
+                                    <Switch id="order-status" checked={settings.push.orderStatus} onCheckedChange={(c) => handleSettingChange('push', 'orderStatus', c)} />
                                 </div>
                             </div>
                         </div>
-                       )}
-                    </CardContent>
-                </Card>
-            </motion.div>
-        </ProfileLayout>
+                    </div>
+                   )}
+                </CardContent>
+            </Card>
+        </motion.div>
     );
 }

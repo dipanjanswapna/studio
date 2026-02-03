@@ -1,4 +1,3 @@
-import { ProfileLayout } from '@/components/layouts/ProfileLayout';
 import { motion } from 'framer-motion';
 import { MembershipCard } from '@/components/cards/MembershipCard';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -53,9 +52,7 @@ export default function MembershipPage() {
   
     if (!user || !user.membershipId || !user.membershipTier) {
         return (
-            <ProfileLayout>
-                <div>Loading membership details...</div>
-            </ProfileLayout>
+            <div>Loading membership details...</div>
         );
     }
     
@@ -68,82 +65,80 @@ export default function MembershipPage() {
         : 100;
     
     return (
-        <ProfileLayout>
-            <div className="space-y-8">
-                 <motion.div variants={itemVariants}>
-                    <MembershipCard
-                        name={user.name || 'Averzo Member'}
-                        tier={user.membershipTier}
-                        memberId={user.membershipId}
-                    />
-                </motion.div>
+        <div className="space-y-8">
+             <motion.div variants={itemVariants}>
+                <MembershipCard
+                    name={user.name || 'Averzo Member'}
+                    tier={user.membershipTier}
+                    memberId={user.membershipId}
+                />
+            </motion.div>
 
-                <motion.div variants={itemVariants}>
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Your Membership Progress</CardTitle>
-                            <CardDescription>Track your progress to the next membership tier.</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                           {ordersLoading ? (
-                            <div className="space-y-2">
-                                <Skeleton className="h-4 w-1/4" />
-                                <Skeleton className="h-3 w-1/2" />
-                                <Skeleton className="h-3 w-full" />
+            <motion.div variants={itemVariants}>
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Your Membership Progress</CardTitle>
+                        <CardDescription>Track your progress to the next membership tier.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                       {ordersLoading ? (
+                        <div className="space-y-2">
+                            <Skeleton className="h-4 w-1/4" />
+                            <Skeleton className="h-3 w-1/2" />
+                            <Skeleton className="h-3 w-full" />
+                        </div>
+                       ) : nextTier ? (
+                            <div>
+                                <h3 className="font-semibold text-center md:text-left">Progress to {nextTier.name}</h3>
+                                <p className="text-sm text-muted-foreground mt-1 text-center md:text-left">
+                                    You are <span className="font-bold text-primary">৳{(nextTier.requirement - userSpend).toLocaleString()}</span> away from unlocking new benefits!
+                                </p>
+                                <Progress value={progressToNextTier} className="mt-3 h-3" />
                             </div>
-                           ) : nextTier ? (
-                                <div>
-                                    <h3 className="font-semibold text-center md:text-left">Progress to {nextTier.name}</h3>
-                                    <p className="text-sm text-muted-foreground mt-1 text-center md:text-left">
-                                        You are <span className="font-bold text-primary">৳{(nextTier.requirement - userSpend).toLocaleString()}</span> away from unlocking new benefits!
-                                    </p>
-                                    <Progress value={progressToNextTier} className="mt-3 h-3" />
-                                </div>
-                            ) : (
-                                 <p className="text-center font-medium text-green-600">You have reached the highest membership tier! 🎉</p>
-                            )}
-                        </CardContent>
-                    </Card>
-                </motion.div>
+                        ) : (
+                             <p className="text-center font-medium text-green-600">You have reached the highest membership tier! 🎉</p>
+                        )}
+                    </CardContent>
+                </Card>
+            </motion.div>
 
-                 <motion.div variants={itemVariants}>
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Membership Tiers & Benefits</CardTitle>
-                            <CardDescription>Explore the benefits and rewards of each membership tier.</CardDescription>
-                        </CardHeader>
-                        <CardContent className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                            {tiersData.map((tier) => {
-                                const isCurrent = tier.name === currentTierName;
-                                return (
-                                    <div key={tier.name} className={cn("border rounded-xl flex flex-col gap-4 p-4", isCurrent && "border-2 border-primary bg-primary/5")}>
-                                        <MembershipCard name={tier.name + " Member"} tier={tier.name} memberId="AVZ-XXX-XXX" />
-                                        <div className="text-center">
-                                            {isCurrent && <Badge>Your Tier</Badge>}
-                                        </div>
-                                        <div className="flex-grow flex flex-col">
-                                            <p className="text-sm text-center text-muted-foreground">{tier.description}</p>
-                                            <p className="text-sm font-semibold text-center mt-3">
-                                                Requirement: <span className="font-bold">Spend ৳{tier.requirement.toLocaleString()}</span>
-                                            </p>
-                                            <Separator className="my-4" />
-                                            <h4 className="font-semibold text-sm mb-2">Benefits:</h4>
-                                            <ul className="space-y-2 text-sm flex-grow">
-                                                {benefits.filter(b => b.tiers.includes(tier.name)).map(b => (
-                                                    <li key={b.title} className="flex items-start gap-2">
-                                                        <Check className="w-4 h-4 text-green-500 mt-0.5 shrink-0" />
-                                                        <span className="text-muted-foreground">{b.title}</span>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
+             <motion.div variants={itemVariants}>
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Membership Tiers & Benefits</CardTitle>
+                        <CardDescription>Explore the benefits and rewards of each membership tier.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        {tiersData.map((tier) => {
+                            const isCurrent = tier.name === currentTierName;
+                            return (
+                                <div key={tier.name} className={cn("border rounded-xl flex flex-col gap-4 p-4", isCurrent && "border-2 border-primary bg-primary/5")}>
+                                    <MembershipCard name={tier.name + " Member"} tier={tier.name} memberId="AVZ-XXX-XXX" />
+                                    <div className="text-center">
+                                        {isCurrent && <Badge>Your Tier</Badge>}
                                     </div>
-                                );
-                            })}
-                        </CardContent>
-                    </Card>
-                </motion.div>
-            </div>
-        </ProfileLayout>
+                                    <div className="flex-grow flex flex-col">
+                                        <p className="text-sm text-center text-muted-foreground">{tier.description}</p>
+                                        <p className="text-sm font-semibold text-center mt-3">
+                                            Requirement: <span className="font-bold">Spend ৳{tier.requirement.toLocaleString()}</span>
+                                        </p>
+                                        <Separator className="my-4" />
+                                        <h4 className="font-semibold text-sm mb-2">Benefits:</h4>
+                                        <ul className="space-y-2 text-sm flex-grow">
+                                            {benefits.filter(b => b.tiers.includes(tier.name)).map(b => (
+                                                <li key={b.title} className="flex items-start gap-2">
+                                                    <Check className="w-4 h-4 text-green-500 mt-0.5 shrink-0" />
+                                                    <span className="text-muted-foreground">{b.title}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </CardContent>
+                </Card>
+            </motion.div>
+        </div>
     );
 }

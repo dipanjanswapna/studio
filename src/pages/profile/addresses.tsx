@@ -3,7 +3,6 @@ import { useState, useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { MapPin, Plus, Home, Briefcase, MoreVertical } from 'lucide-react';
-import { ProfileLayout } from '@/components/layouts/ProfileLayout';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -212,84 +211,84 @@ export default function AddressesPage() {
 
 
   return (
-    <ProfileLayout>
-        <motion.div variants={itemVariants}>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-                <div className="lg:col-span-2">
-                    <Card>
-                        <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                            <div>
-                                <CardTitle>Manage Addresses</CardTitle>
-                                <CardDescription>Add, edit, or remove your shipping addresses.</CardDescription>
-                            </div>
-                            <Button className="w-full sm:w-auto" onClick={() => handleOpenModal()}>
-                                <Plus className="mr-2 h-4 w-4" /> Add New Address
-                            </Button>
-                        </CardHeader>
-                        <CardContent>
-                            {loading ? (
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <Skeleton className="h-48 w-full" />
-                                <Skeleton className="h-48 w-full" />
-                                </div>
-                            ) : !addresses || addresses.length === 0 ? (
-                                <div className="min-h-[300px] flex flex-col items-center justify-center text-center p-6 border-2 border-dashed rounded-lg bg-secondary/50">
-                                    <MapPin className="mx-auto h-12 w-12 text-muted-foreground/50" />
-                                    <h2 className="mt-4 text-xl font-semibold">No addresses saved</h2>
-                                    <p className="mt-1 text-muted-foreground">
-                                        Add a new address to make your checkout process faster.
-                                    </p>
-                                </div>
-                            ) : (
-                                <div className="grid grid-cols-1 gap-4">
-                                    {addresses.map((addr) => (
-                                        <Card key={addr.id} className="flex flex-col">
-                                            <CardHeader className="flex flex-row items-start justify-between">
-                                                <div className="flex items-center gap-3">
-                                                    {addr.type === 'Home' ? <Home className="h-5 w-5 text-muted-foreground" /> : <Briefcase className="h-5 w-5 text-muted-foreground" />}
-                                                    <h3 className="font-semibold text-lg">{addr.type}</h3>
-                                                    {addr.isDefault && <Badge>Default</Badge>}
-                                                </div>
-                                                <DropdownMenu>
-                                                    <DropdownMenuTrigger asChild>
-                                                        <Button variant="ghost" size="icon" className="h-8 w-8 -mr-2 -mt-2">
-                                                            <MoreVertical className="h-4 w-4" />
-                                                        </Button>
-                                                    </DropdownMenuTrigger>
-                                                    <DropdownMenuContent align="end">
-                                                        {!addr.isDefault && <DropdownMenuItem onClick={() => handleSetAsDefault(addr)}>Set as Default</DropdownMenuItem>}
-                                                        <DropdownMenuItem onClick={() => handleOpenModal(addr)}>Edit</DropdownMenuItem>
-                                                        <DropdownMenuItem className="text-destructive focus:text-destructive" onClick={() => handleDeleteAddress(addr)}>Delete</DropdownMenuItem>
-                                                    </DropdownMenuContent>
-                                                </DropdownMenu>
-                                            </CardHeader>
-                                            <CardContent className="flex-grow space-y-2 text-sm text-muted-foreground">
-                                                <p className="font-medium text-foreground">{addr.name}</p>
-                                                <p>{addr.address}</p>
-                                                <p>{addr.city}</p>
-                                                <p>Phone: {addr.phone}</p>
-                                            </CardContent>
-                                        </Card>
-                                    ))}
-                                </div>
-                            )}
-                        </CardContent>
-                    </Card>
-                </div>
-                 <div className="lg:col-span-1 lg:sticky top-28">
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Address Map</CardTitle>
-                            <CardDescription>Visual representation of your saved addresses.</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <DynamicAddressMap addresses={addresses || []} />
-                        </CardContent>
-                    </Card>
-                </div>
-            </div>
-        </motion.div>
-      <AddressModal isOpen={isModalOpen} onClose={handleCloseModal} onSave={handleSaveAddress} addressToEdit={addressToEdit} />
-    </ProfileLayout>
+    <>
+      <motion.div variants={itemVariants}>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+              <div className="lg:col-span-2">
+                  <Card>
+                      <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                          <div>
+                              <CardTitle>Manage Addresses</CardTitle>
+                              <CardDescription>Add, edit, or remove your shipping addresses.</CardDescription>
+                          </div>
+                          <Button className="w-full sm:w-auto" onClick={() => handleOpenModal()}>
+                              <Plus className="mr-2 h-4 w-4" /> Add New Address
+                          </Button>
+                      </CardHeader>
+                      <CardContent>
+                          {loading ? (
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                              <Skeleton className="h-48 w-full" />
+                              <Skeleton className="h-48 w-full" />
+                              </div>
+                          ) : !addresses || addresses.length === 0 ? (
+                              <div className="min-h-[300px] flex flex-col items-center justify-center text-center p-6 border-2 border-dashed rounded-lg bg-secondary/50">
+                                  <MapPin className="mx-auto h-12 w-12 text-muted-foreground/50" />
+                                  <h2 className="mt-4 text-xl font-semibold">No addresses saved</h2>
+                                  <p className="mt-1 text-muted-foreground">
+                                      Add a new address to make your checkout process faster.
+                                  </p>
+                              </div>
+                          ) : (
+                              <div className="grid grid-cols-1 gap-4">
+                                  {addresses.map((addr) => (
+                                      <Card key={addr.id} className="flex flex-col">
+                                          <CardHeader className="flex flex-row items-start justify-between">
+                                              <div className="flex items-center gap-3">
+                                                  {addr.type === 'Home' ? <Home className="h-5 w-5 text-muted-foreground" /> : <Briefcase className="h-5 w-5 text-muted-foreground" />}
+                                                  <h3 className="font-semibold text-lg">{addr.type}</h3>
+                                                  {addr.isDefault && <Badge>Default</Badge>}
+                                              </div>
+                                              <DropdownMenu>
+                                                  <DropdownMenuTrigger asChild>
+                                                      <Button variant="ghost" size="icon" className="h-8 w-8 -mr-2 -mt-2">
+                                                          <MoreVertical className="h-4 w-4" />
+                                                      </Button>
+                                                  </DropdownMenuTrigger>
+                                                  <DropdownMenuContent align="end">
+                                                      {!addr.isDefault && <DropdownMenuItem onClick={() => handleSetAsDefault(addr)}>Set as Default</DropdownMenuItem>}
+                                                      <DropdownMenuItem onClick={() => handleOpenModal(addr)}>Edit</DropdownMenuItem>
+                                                      <DropdownMenuItem className="text-destructive focus:text-destructive" onClick={() => handleDeleteAddress(addr)}>Delete</DropdownMenuItem>
+                                                  </DropdownMenuContent>
+                                              </DropdownMenu>
+                                          </CardHeader>
+                                          <CardContent className="flex-grow space-y-2 text-sm text-muted-foreground">
+                                              <p className="font-medium text-foreground">{addr.name}</p>
+                                              <p>{addr.address}</p>
+                                              <p>{addr.city}</p>
+                                              <p>Phone: {addr.phone}</p>
+                                          </CardContent>
+                                      </Card>
+                                  ))}
+                              </div>
+                          )}
+                      </CardContent>
+                  </Card>
+              </div>
+               <div className="lg:col-span-1 lg:sticky top-28">
+                  <Card>
+                      <CardHeader>
+                          <CardTitle>Address Map</CardTitle>
+                          <CardDescription>Visual representation of your saved addresses.</CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                          <DynamicAddressMap addresses={addresses || []} />
+                      </CardContent>
+                  </Card>
+              </div>
+          </div>
+      </motion.div>
+    <AddressModal isOpen={isModalOpen} onClose={handleCloseModal} onSave={handleSaveAddress} addressToEdit={addressToEdit} />
+    </>
   );
 }

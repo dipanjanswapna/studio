@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { CreditCard, Plus, MoreVertical } from 'lucide-react';
-import { ProfileLayout } from '@/components/layouts/ProfileLayout';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -128,7 +127,7 @@ export default function PaymentsPage() {
   };
 
   return (
-    <ProfileLayout>
+    <>
       <motion.div variants={itemVariants}>
         <Card>
           <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -184,6 +183,6 @@ export default function PaymentsPage() {
         </Card>
       </motion.div>
       <PaymentMethodModal isOpen={isModalOpen} onClose={handleCloseModal} onSave={handleSavePayment} paymentToEdit={paymentToEdit} />
-    </ProfileLayout>
+    </>
   );
 }
