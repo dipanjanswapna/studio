@@ -14,6 +14,7 @@ import { AdminLayout } from '@/components/layouts/AdminLayout';
 import { VendorLayout } from '@/components/layouts/VendorLayout';
 import { StaffLayout } from '@/components/layouts/StaffLayout';
 import { OutletLayout } from '@/components/layouts/OutletLayout';
+import { B2BLayout } from '@/components/layouts/B2BLayout';
 import { ProfileLayout } from '@/components/layouts/ProfileLayout';
 import { SearchProvider } from '@/context/SearchContext';
 import { SearchOverlay } from '@/components/search/SearchOverlay';
@@ -69,8 +70,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   const isVendorRoute = pathname.startsWith('/portal/vendor');
   const isOutletRoute = pathname.startsWith('/portal/outlet');
   const isStaffRoute = pathname.startsWith('/portal/staff');
+  const isB2BRoute = pathname.startsWith('/portal/b2b');
   const isProfileRoute = pathname.startsWith('/profile');
-  const isPortalRoute = isAdminRoute || isVendorRoute || isOutletRoute || isStaffRoute;
+  const isPortalRoute = isAdminRoute || isVendorRoute || isOutletRoute || isStaffRoute || isB2BRoute;
   const isAuthRoute = pathname.startsWith('/auth');
 
 
@@ -84,6 +86,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     if (isVendorRoute) title = "Averzo Vendor Portal";
     if (isOutletRoute) title = "Averzo Outlet Portal";
     if (isStaffRoute) title = "Averzo Staff Portal";
+    if (isB2BRoute) title = "Averzo B2B Portal";
   }
 
 
@@ -114,6 +117,13 @@ function MyApp({ Component, pageProps }: AppProps) {
         <StaffLayout>
           <Component {...pageProps} />
         </StaffLayout>
+      );
+    }
+    if (isB2BRoute) {
+      return (
+        <B2BLayout>
+          <Component {...pageProps} />
+        </B2BLayout>
       );
     }
     

@@ -187,6 +187,7 @@ export default function Header() {
         case "VENDOR": return "/portal/vendor";
         case "OUTLET": return "/portal/outlet";
         case "STAFF": return "/portal/staff";
+        case "B2B_CUSTOMER": return "/portal/b2b";
         case "CUSTOMER":
         default: return "/profile";
     }
@@ -199,6 +200,7 @@ export default function Header() {
         case "VENDOR": return Briefcase;
         case "OUTLET": return Store;
         case "STAFF": return User;
+        case "B2B_CUSTOMER": return Briefcase;
         case "CUSTOMER":
         default: return LayoutDashboard;
     }

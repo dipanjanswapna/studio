@@ -8,9 +8,10 @@ const protectedRoutes: { [key: string]: string[] } = {
   '/portal/vendor': ['VENDOR'],
   '/portal/outlet': ['OUTLET'],
   '/portal/staff': ['STAFF'],
-  '/profile': ['CUSTOMER', 'ADMIN', 'VENDOR', 'OUTLET', 'STAFF'], // All logged in users can see profile
-  '/cart': ['CUSTOMER', 'ADMIN', 'VENDOR', 'OUTLET', 'STAFF'], // All logged in users can see cart
-  '/checkout': ['CUSTOMER', 'ADMIN', 'VENDOR', 'OUTLET', 'STAFF'],
+  '/portal/b2b': ['B2B_CUSTOMER'],
+  '/profile': ['CUSTOMER', 'ADMIN', 'VENDOR', 'OUTLET', 'STAFF', 'B2B_CUSTOMER'], // All logged in users can see profile
+  '/cart': ['CUSTOMER', 'ADMIN', 'VENDOR', 'OUTLET', 'STAFF', 'B2B_CUSTOMER'], // All logged in users can see cart
+  '/checkout': ['CUSTOMER', 'ADMIN', 'VENDOR', 'OUTLET', 'STAFF', 'B2B_CUSTOMER'],
 };
 
 export function RouteGuard({ children }: { children: ReactNode }) {
@@ -50,6 +51,7 @@ export function RouteGuard({ children }: { children: ReactNode }) {
           case 'VENDOR': router.push('/portal/vendor'); break;
           case 'OUTLET': router.push('/portal/outlet'); break;
           case 'STAFF': router.push('/portal/staff'); break;
+          case 'B2B_CUSTOMER': router.push('/portal/b2b'); break;
           default: router.push('/');
         }
       }
