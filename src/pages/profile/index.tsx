@@ -1,3 +1,4 @@
+'use client';
 import { useAuth } from '@/context/authContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -246,6 +247,31 @@ export default function ProfileDashboardPage() {
                  />
                )}
             </motion.div>
+            {user.role === 'B2B_CUSTOMER' && (
+              <motion.div variants={itemVariants}>
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Company Information</CardTitle>
+                    <CardDescription>Your registered business details.</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4 text-sm">
+                    <div>
+                      <p className="text-muted-foreground">Company Name</p>
+                      <p className="font-semibold">{user.companyName || 'Not set'}</p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground">VAT Number</p>
+                      <p className="font-semibold">{user.vatNumber || 'Not set'}</p>
+                    </div>
+                  </CardContent>
+                   <CardFooter>
+                      <Button variant="outline" asChild size="sm">
+                          <Link href="/profile/settings">Edit Company Details</Link>
+                      </Button>
+                  </CardFooter>
+                </Card>
+              </motion.div>
+            )}
           </div>
         </div>
       </div>

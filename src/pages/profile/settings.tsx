@@ -16,6 +16,8 @@ import { cn } from '@/lib/utils';
 import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Separator } from '@/components/ui/separator';
+import { useEffect } from 'react';
 
 const itemVariants = {
   hidden: { y: 20, opacity: 0 },
@@ -29,6 +31,8 @@ const profileSchema = z.object({
     required_error: "A date of birth is required.",
   }).optional(),
   gender: z.enum(['male', 'female', 'other'], {required_error: "Please select a gender."}).optional(),
+  companyName: z.string().optional(),
+  vatNumber: z.string().optional(),
 });
 
 type ProfileFormValues = z.infer<typeof profileSchema>;
@@ -44,8 +48,24 @@ export default function SettingsPage() {
       phone: user?.phone || '',
       dob: user?.dob ? new Date(user.dob) : undefined,
       gender: user?.gender,
+      companyName: user?.companyName || '',
+      vatNumber: user?.vatNumber || '',
     },
   });
+
+  useEffect(() => {
+    if(user) {
+        form.reset({
+            name: user.name || '',
+            phone: user.phone || '',
+            dob: user.dob ? new Date(user.dob) : undefined,
+            gender: user.gender,
+            companyName: user.companyName || '',
+            vatNumber: user.vatNumber || '',
+        });
+    }
+  }, [user, form]);
+
 
   const onProfileSubmit = (data: ProfileFormValues) => {
     const userData = { ...data, dob: data.dob ? data.dob.toISOString() : undefined };
@@ -176,6 +196,39 @@ export default function SettingsPage() {
                           )}
                         />
                     </div>
+                    {user?.role === 'B2B_CUSTOMER' && (
+                        <>
+                            <Separator />
+                            <div className="space-y-1">
+                                <h4 className="font-medium">Company Details</h4>
+                                <p className="text-sm text-muted-foreground">This information is only visible for B2B accounts.</p>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <FormField
+                                    control={form.control}
+                                    name="companyName"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Company Name</FormLabel>
+                                            <FormControl><Input placeholder="Your Company LLC" {...field} /></FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="vatNumber"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>VAT Number</FormLabel>
+                                            <FormControl><Input placeholder="Your VAT/TIN" {...field} /></FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                        </>
+                    )}
                 </CardContent>
                 <CardFooter>
                   <Button type="submit" loading={form.formState.isSubmitting}>Save Changes</Button>
