@@ -89,6 +89,8 @@ export function LocationSelector({ onLocationSelect, initialPosition }: Location
   };
 
   useEffect(() => {
+    if (!position) return;
+    
     const provider = new OpenStreetMapProvider();
     const reverseGeocode = async () => {
       try {
@@ -101,11 +103,13 @@ export function LocationSelector({ onLocationSelect, initialPosition }: Location
         });
       } catch (error) {
         console.error("Reverse geocoding failed", error);
-        onLocationSelect({
-            lat: position[0],
-            lng: position[1],
-            address: 'Could not determine address'
-        });
+        if (position) {
+            onLocationSelect({
+                lat: position[0],
+                lng: position[1],
+                address: 'Could not determine address'
+            });
+        }
       }
     };
     reverseGeocode();
