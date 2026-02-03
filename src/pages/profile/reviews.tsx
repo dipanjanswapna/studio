@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useAuth } from '@/context/authContext';
 import { useCollection, useFirestore } from '@/firebase';
-import { collection, query, where, orderBy } from 'firebase/firestore';
+import { collection, query } from 'firebase/firestore';
 import type { Review } from '@/data/types';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Separator } from '@/components/ui/separator';
@@ -28,12 +28,21 @@ export default function ReviewsPage() {
     const reviewsQuery = useMemo(() => {
         if (authLoading || !user) return null;
         return query(
-            collection(db, 'users', user.uid, 'reviews'), 
-            orderBy('createdAt', 'desc')
+            collection(db, 'users', user.uid, 'reviews')
         );
     }, [user, db, authLoading]);
 
-    const { data: reviews, loading: reviewsLoading } = useCollection<Review>(reviewsQuery);
+    const { data: rawReviews, loading: reviewsLoading } = useCollection<Review>(reviewsQuery);
+    
+    // Sort reviews on the client side
+    const reviews = useMemo(() => {
+        if (!rawReviews) return null;
+        return [...rawReviews].sort((a, b) => {
+            const dateA = a.createdAt?.seconds || 0;
+            const dateB = b.createdAt?.seconds || 0;
+            return dateB - dateA;
+        });
+    }, [rawReviews]);
 
     const loading = authLoading || reviewsLoading;
 
@@ -118,7 +127,7 @@ export default function ReviewsPage() {
                                 </div>
                             </div>
                             <div className="bg-muted/50 px-4 py-2 text-xs text-muted-foreground text-right">
-                                Posted on {new Date(review.createdAt.seconds * 1000).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                                Posted on {review.createdAt ? new Date(review.createdAt.seconds * 1000).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '...'}
                             </div>
                           </Card>
                       )})}
