@@ -16,7 +16,6 @@ import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
 import dynamic from 'next/dynamic';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import MarkerClusterGroup from 'react-leaflet-cluster';
 import L from 'leaflet';
 
 const itemVariants = {
@@ -45,7 +44,6 @@ const mapContainerStyle = {
 const defaultCenter: [number, number] = [23.8103, 90.4125];
 
 function AddressMap({ addresses }: { addresses: Address[] }) {
-    // Fix for default Leaflet icon issue with webpack
     const leafletIcon = L.icon({
         iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
         iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
@@ -76,7 +74,7 @@ function AddressMap({ addresses }: { addresses: Address[] }) {
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-                <MarkerClusterGroup chunkedLoading>
+                <>
                   {addresses.map(addr => (
                       addr.latitude && addr.longitude && (
                           <Marker
@@ -91,7 +89,7 @@ function AddressMap({ addresses }: { addresses: Address[] }) {
                           </Marker>
                       )
                   ))}
-                </MarkerClusterGroup>
+                </>
             </MapContainer>
         </div>
     );
