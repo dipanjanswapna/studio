@@ -1,3 +1,4 @@
+'use client';
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, useMap, useMapEvents } from 'react-leaflet';
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
@@ -90,7 +91,10 @@ export function LocationSelector({ onLocationSelect, initialPosition }: Location
   useEffect(() => {
     const reverseGeocode = async () => {
       try {
-        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${position[0]}&lon=${position[1]}`);
+        const response = await fetch(`/api/geocode/reverse?lat=${position[0]}&lon=${position[1]}`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch address from proxy.');
+        }
         const data = await response.json();
         const addressLabel = data.display_name || 'Address not found';
         onLocationSelect({
