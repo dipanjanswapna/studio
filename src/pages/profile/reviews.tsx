@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useAuth } from '@/context/authContext';
 import { useCollection, useFirestore } from '@/firebase';
-import { collectionGroup, query, where, orderBy } from 'firebase/firestore';
+import { collection, query, where, orderBy } from 'firebase/firestore';
 import type { Review } from '@/data/types';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Separator } from '@/components/ui/separator';
@@ -28,18 +28,12 @@ export default function ReviewsPage() {
     const reviewsQuery = useMemo(() => {
         if (authLoading || !user) return null;
         return query(
-            collectionGroup(db, 'reviews'), 
-            where('userId', '==', user.uid)
+            collection(db, 'users', user.uid, 'reviews'), 
+            orderBy('createdAt', 'desc')
         );
     }, [user, db, authLoading]);
 
-    const { data: unsortedReviews, loading: reviewsLoading } = useCollection<Review>(reviewsQuery);
-    
-    const reviews = useMemo(() => {
-        if (!unsortedReviews) return null;
-        // Sort descending by creation date
-        return [...unsortedReviews].sort((a, b) => b.createdAt.seconds - a.createdAt.seconds);
-    }, [unsortedReviews]);
+    const { data: reviews, loading: reviewsLoading } = useCollection<Review>(reviewsQuery);
 
     const loading = authLoading || reviewsLoading;
 

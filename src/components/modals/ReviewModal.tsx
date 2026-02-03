@@ -8,7 +8,7 @@ import * as z from 'zod';
 import { useReviewModal } from '@/context/ReviewContext';
 import { useAuth } from '@/context/authContext';
 import { useFirestore } from '@/firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, serverTimestamp, writeBatch, doc } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
@@ -71,10 +71,18 @@ export function ReviewModal() {
       createdAt: serverTimestamp(),
     };
     
-    const reviewsRef = collection(db, 'products', productToReview.productId, 'reviews');
+    const batch = writeBatch(db);
     
+    // Write to products/{productId}/reviews/{reviewId}
+    const productReviewRef = doc(collection(db, 'products', productToReview.productId, 'reviews'));
+    batch.set(productReviewRef, reviewData);
+    
+    // Write to users/{userId}/reviews/{reviewId}
+    const userReviewRef = doc(collection(db, 'users', user.uid, 'reviews'), productReviewRef.id);
+    batch.set(userReviewRef, reviewData);
+
     try {
-      await addDoc(reviewsRef, reviewData);
+      await batch.commit();
       toast({ title: 'Review Submitted!', description: 'Thank you for your feedback.' });
       form.reset();
       closeReviewModal();

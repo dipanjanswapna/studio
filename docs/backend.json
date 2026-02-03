@@ -458,6 +458,10 @@
         "schema": { "$ref": "#/entities/Review" },
         "description": "Stores user reviews for a specific product."
     },
+    "/users/{userId}/reviews/{reviewId}": {
+        "schema": { "$ref": "#/entities/Review" },
+        "description": "Stores a copy of a user's reviews for easy querying."
+    },
     "/categories/{categoryId}": {
       "schema": {
         "$ref": "#/entities/Category"
