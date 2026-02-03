@@ -23,7 +23,7 @@ const DynamicLocationSelector = dynamic(
     () => import('@/components/LocationSelector').then(mod => mod.LocationSelector),
     { 
         ssr: false,
-        loading: () => <Skeleton className="h-96 w-full" />
+        loading: () => <Skeleton className="h-full w-full min-h-[300px] rounded-lg" />
     }
 );
 
@@ -107,22 +107,23 @@ export function AddressModal({ isOpen, onClose, onSave, addressToEdit }: Address
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-2xl p-0 max-h-[90vh] flex flex-col">
+      <DialogContent className="sm:max-w-4xl p-0 max-h-[90vh] flex flex-col">
         <DialogHeader className="p-6 pb-4 border-b shrink-0">
           <DialogTitle>{addressToEdit ? 'Edit Address' : 'Add a New Address'}</DialogTitle>
           <DialogDescription>
-            Enter your address details or select a location on the map.
+            Enter your address details or select a location on the map for accuracy.
           </DialogDescription>
         </DialogHeader>
         <div className="flex-1 overflow-y-auto">
           <Form {...form}>
-            <form id="address-form" onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-x-6">
-              <div className="space-y-4 p-6">
-                <FormField
+            <form id="address-form" onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2">
+              {/* Column 1: Form Fields */}
+              <div className="p-6 space-y-6 border-b md:border-r md:border-b-0">
+                 <FormField
                   control={form.control}
                   name="type"
                   render={({ field }) => (
-                    <FormItem className="space-y-3">
+                    <FormItem>
                       <FormLabel>Address Type</FormLabel>
                       <FormControl>
                         <RadioGroup
@@ -144,43 +145,53 @@ export function AddressModal({ isOpen, onClose, onSave, addressToEdit }: Address
                     </FormItem>
                   )}
                 />
-                <FormField control={form.control} name="name" render={({ field }) => (
-                    <FormItem><FormLabel>Full Name</FormLabel><FormControl><Input placeholder="John Doe" {...field} /></FormControl><FormMessage /></FormItem>
-                )} />
-                <FormField control={form.control} name="phone" render={({ field }) => (
-                    <FormItem><FormLabel>Phone Number</FormLabel><FormControl><Input placeholder="01712345678" {...field} /></FormControl><FormMessage /></FormItem>
-                )} />
-                <FormField control={form.control} name="address" render={({ field }) => (
-                    <FormItem><FormLabel>Full Address</FormLabel><FormControl><Input placeholder="House 123, Road 45, Gulshan 2, Dhaka" {...field} /></FormControl><FormMessage /></FormItem>
-                )} />
-                <FormField control={form.control} name="city" render={({ field }) => (
-                    <FormItem><FormLabel>City / District</FormLabel><FormControl><Input placeholder="Dhaka" {...field} /></FormControl><FormMessage /></FormItem>
-                )} />
+                
+                <div className="space-y-4">
+                    <h3 className="text-sm font-medium text-muted-foreground border-b pb-2">Contact Information</h3>
+                    <FormField control={form.control} name="name" render={({ field }) => (
+                        <FormItem><FormLabel>Full Name</FormLabel><FormControl><Input placeholder="e.g. John Doe" {...field} /></FormControl><FormMessage /></FormItem>
+                    )} />
+                    <FormField control={form.control} name="phone" render={({ field }) => (
+                        <FormItem><FormLabel>Phone Number</FormLabel><FormControl><Input placeholder="e.g. 01712345678" {...field} /></FormControl><FormMessage /></FormItem>
+                    )} />
+                </div>
+                
+                <div className="space-y-4">
+                    <h3 className="text-sm font-medium text-muted-foreground border-b pb-2">Location Details</h3>
+                    <FormField control={form.control} name="address" render={({ field }) => (
+                        <FormItem><FormLabel>Full Address (Street, Area)</FormLabel><FormControl><Input placeholder="e.g. House 123, Road 45, Gulshan 2" {...field} /></FormControl><FormMessage /></FormItem>
+                    )} />
+                    <FormField control={form.control} name="city" render={({ field }) => (
+                        <FormItem><FormLabel>City / District</FormLabel><FormControl><Input placeholder="e.g. Dhaka" {...field} /></FormControl><FormMessage /></FormItem>
+                    )} />
+                </div>
+
                  <FormField
                   control={form.control}
                   name="isDefault"
                   render={({ field }) => (
-                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                    <FormItem className="flex flex-row items-center gap-3 space-y-0 rounded-lg border p-3 bg-background">
                       <FormControl>
                         <Checkbox
                           checked={field.value}
                           onCheckedChange={field.onChange}
                         />
                       </FormControl>
-                      <div className="space-y-1 leading-none">
-                        <FormLabel>
-                          Set as default shipping address
-                        </FormLabel>
-                      </div>
+                      <FormLabel className="leading-none !mt-0">
+                        Set as default shipping address
+                      </FormLabel>
                     </FormItem>
                   )}
                 />
               </div>
-              <div className="p-6 pt-0 md:pt-6">
-                <FormLabel>Select on Map</FormLabel>
-                 <div className="mt-2">
+
+              {/* Column 2: Map */}
+              <div className="p-6 h-full flex flex-col min-h-[400px] md:min-h-0">
+                <FormLabel>Pin Location on Map</FormLabel>
+                <p className="text-xs text-muted-foreground mt-1 mb-2">Search for a location or click on the map to set your address automatically.</p>
+                <div className="flex-grow rounded-lg overflow-hidden">
                     <DynamicLocationSelector onLocationSelect={handleLocationSelect} initialPosition={initialPosition} />
-                 </div>
+                </div>
               </div>
             </form>
           </Form>
