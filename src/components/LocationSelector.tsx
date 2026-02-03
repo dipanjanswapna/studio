@@ -29,6 +29,8 @@ function MapController({ onLocationSelect, initialPosition }: { onLocationSelect
   const [position, setPosition] = useState<L.LatLng | null>(() => initialPosition ? L.latLng(initialPosition[0], initialPosition[1]) : null);
   const markerRef = useRef<LeafletMarker>(null);
   const isDragging = useRef(false);
+  
+  const provider = useMemo(() => new OpenStreetMapProvider(), []);
 
   useEffect(() => {
     if(initialPosition && !position) {
@@ -41,7 +43,6 @@ function MapController({ onLocationSelect, initialPosition }: { onLocationSelect
 
   // Add search control
   useEffect(() => {
-    const provider = new OpenStreetMapProvider();
     const searchControl = new (GeoSearchControl as any)({
       provider,
       style: 'bar',
@@ -61,7 +62,7 @@ function MapController({ onLocationSelect, initialPosition }: { onLocationSelect
         map.removeControl(searchControl)
         map.off('geosearch/showlocation', onResult);
     };
-  }, [map]);
+  }, [map, provider]);
 
   // Handle map clicks
   useEffect(() => {
@@ -94,12 +95,8 @@ function MapController({ onLocationSelect, initialPosition }: { onLocationSelect
     
     const reverseGeocode = async () => {
       try {
-        const response = await fetch(`/api/geocode/reverse?lat=${position.lat}&lon=${position.lng}`);
-        if (!response.ok) {
-            throw new Error('Failed to fetch address from proxy.');
-        }
-        const data = await response.json();
-        const addressLabel = data.display_name || 'Address not found';
+        const results = await provider.search({ query: `${position.lat}, ${position.lng}` });
+        const addressLabel = results.length > 0 ? (results[0].label as string) : 'Address not found';
 
         onLocationSelect({
             lat: position.lat,
@@ -122,7 +119,7 @@ function MapController({ onLocationSelect, initialPosition }: { onLocationSelect
 
     return () => clearTimeout(timer);
 
-  }, [position, onLocationSelect]);
+  }, [position, onLocationSelect, provider]);
 
 
   return position ? (
