@@ -95,12 +95,10 @@ function MapController({ onLocationSelect, initialPosition }: { onLocationSelect
     
     const reverseGeocode = async () => {
       try {
-        const response = await fetch(`/api/geocode/reverse?lat=${position.lat}&lon=${position.lng}`);
-        if (!response.ok) {
-            throw new Error('Failed to fetch address from proxy.');
-        }
-        const data = await response.json();
-        const addressLabel = data.display_name || 'Address not found';
+        // leaflet-geosearch provider can handle reverse geocoding
+        // when the query is in "lat, lon" format.
+        const results = await provider.search({ query: `${position.lat}, ${position.lng}` });
+        const addressLabel = results.length > 0 ? (results[0].label as string) : 'Address not found';
 
         onLocationSelect({
             lat: position.lat,
@@ -123,7 +121,7 @@ function MapController({ onLocationSelect, initialPosition }: { onLocationSelect
 
     return () => clearTimeout(timer);
 
-  }, [position, onLocationSelect]);
+  }, [position, onLocationSelect, provider]);
 
 
   return position ? (
