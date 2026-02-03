@@ -91,11 +91,16 @@ function MapController({ onLocationSelect, initialPosition }: { onLocationSelect
   // Reverse geocode when position changes
   useEffect(() => {
     if (!position) return;
-    const provider = new OpenStreetMapProvider();
+    
     const reverseGeocode = async () => {
       try {
-        const results = await provider.search({ query: `${position.lat},${position.lng}` });
-        const addressLabel = results.length > 0 ? (results[0].label as string) : 'Address not found';
+        const response = await fetch(`/api/geocode/reverse?lat=${position.lat}&lon=${position.lng}`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch address from proxy.');
+        }
+        const data = await response.json();
+        const addressLabel = data.display_name || 'Address not found';
+
         onLocationSelect({
             lat: position.lat,
             lng: position.lng,
@@ -110,7 +115,13 @@ function MapController({ onLocationSelect, initialPosition }: { onLocationSelect
         });
       }
     };
-    reverseGeocode();
+    
+    const timer = setTimeout(() => {
+        reverseGeocode();
+    }, 500); // Debounce to avoid too many requests
+
+    return () => clearTimeout(timer);
+
   }, [position, onLocationSelect]);
 
 
