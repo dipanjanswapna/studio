@@ -15,8 +15,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
 import dynamic from 'next/dynamic';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import L from 'leaflet';
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -35,67 +33,7 @@ export type Address = {
     longitude?: number;
 };
 
-const mapContainerStyle = {
-  width: '100%',
-  height: '100%',
-  borderRadius: '0.75rem',
-};
-
-const defaultCenter: [number, number] = [23.8103, 90.4125];
-
-function AddressMap({ addresses }: { addresses: Address[] }) {
-    const leafletIcon = L.icon({
-        iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-        iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-        shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize: [41, 41]
-    });
-    
-    const mapCenter = useMemo(() => {
-        const validAddresses = addresses.filter(a => a.latitude && a.longitude);
-        if (validAddresses.length > 0) {
-            return [validAddresses[0].latitude!, validAddresses[0].longitude!] as [number, number];
-        }
-        return defaultCenter;
-    }, [addresses]);
-
-    return (
-        <div className="aspect-square w-full bg-muted rounded-lg overflow-hidden">
-            <MapContainer
-                center={mapCenter}
-                zoom={12}
-                scrollWheelZoom={true}
-                style={mapContainerStyle}
-            >
-                <TileLayer
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-                <>
-                  {addresses.map(addr => (
-                      addr.latitude && addr.longitude && (
-                          <Marker
-                              key={addr.id}
-                              position={[addr.latitude, addr.longitude]}
-                              icon={leafletIcon}
-                          >
-                            <Popup>
-                                <h4 className="font-bold">{addr.name} ({addr.type})</h4>
-                                <p className="text-sm">{addr.address}</p>
-                            </Popup>
-                          </Marker>
-                      )
-                  ))}
-                </>
-            </MapContainer>
-        </div>
-    );
-}
-
-const DynamicAddressMap = dynamic(() => Promise.resolve(AddressMap), {
+const DynamicAddressMap = dynamic(() => import('@/components/AddressMap'), {
   ssr: false,
   loading: () => <Skeleton className="aspect-square w-full" />,
 });
