@@ -2,7 +2,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, useMap, useMapEvents } from 'react-leaflet';
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
-import type { Marker as LeafletMarker, LatLngExpression, Icon } from 'leaflet';
+import type { Marker as LeafletMarker } from 'leaflet';
 import L from 'leaflet';
 
 // Fix for default Leaflet icon issue with webpack
@@ -11,13 +11,6 @@ L.Icon.Default.mergeOptions({
   iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
   iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-});
-
-const searchControl = new GeoSearchControl({
-  provider: new OpenStreetMapProvider(),
-  style: 'bar',
-  showMarker: false,
-  autoClose: true,
 });
 
 interface LocationData {
@@ -31,30 +24,39 @@ interface LocationSelectorProps {
   initialPosition?: [number, number];
 }
 
-const SearchField = ({ onResult }: { onResult: (result: any) => void }) => {
-  const map = useMap();
+// This component will handle all map interactions
+function MapInteractionController({ setPosition }: { setPosition: (pos: L.LatLng) => void }) {
+    const map = useMap();
 
-  useEffect(() => {
-    map.addControl(searchControl);
-    const onShowLocation = (e: any) => {
-        onResult(e.location);
-    };
-    map.on('geosearch/showlocation', onShowLocation);
-    return () => {
-        map.off('geosearch/showlocation', onShowLocation);
-        map.removeControl(searchControl);
-    };
-  }, [map, onResult]);
+    // Handle search
+    useEffect(() => {
+        const provider = new OpenStreetMapProvider();
+        const searchControl = new GeoSearchControl({
+            provider,
+            style: 'bar',
+            showMarker: false, // We'll manage our own marker
+            autoClose: true,
+        });
 
-  return null;
-};
+        map.addControl(searchControl);
 
-const MapEvents = ({ onMapChange }: { onMapChange: (latlng: {lat: number, lng: number}) => void }) => {
-    const markerRef = useRef<LeafletMarker>(null);
+        const onShowLocation = (e: any) => {
+            setPosition(L.latLng(e.location.y, e.location.x));
+            map.flyTo([e.location.y, e.location.x], 15);
+        };
+        
+        map.on('geosearch/showlocation', onShowLocation);
 
-    const map = useMapEvents({
+        return () => {
+            map.removeControl(searchControl);
+            map.off('geosearch/showlocation', onShowLocation);
+        };
+    }, [map, setPosition]);
+
+    // Handle map clicks
+    useMapEvents({
         click(e) {
-            onMapChange(e.latlng);
+            setPosition(e.latlng);
             map.flyTo(e.latlng, map.getZoom());
         },
     });
@@ -63,73 +65,62 @@ const MapEvents = ({ onMapChange }: { onMapChange: (latlng: {lat: number, lng: n
 }
 
 export function LocationSelector({ onLocationSelect, initialPosition }: LocationSelectorProps) {
-  const [position, setPosition] = useState<[number, number]>(initialPosition || [23.8103, 90.4125]);
+  const [position, setPosition] = useState<L.LatLng | null>(initialPosition ? L.latLng(initialPosition[0], initialPosition[1]) : null);
   const markerRef = useRef<LeafletMarker>(null);
 
   const eventHandlers = useMemo(() => ({
     dragend() {
       const marker = markerRef.current;
       if (marker != null) {
-        const newPos = marker.getLatLng();
-        setPosition([newPos.lat, newPos.lng]);
+        setPosition(marker.getLatLng());
       }
     },
   }), []);
 
-  const handleMapChange = (latlng: {lat: number, lng: number}) => {
-    setPosition([latlng.lat, latlng.lng]);
-  };
-  
-  const handleSearchResult = (location: any) => {
-    setPosition([location.y, location.x]);
-    const map = markerRef.current?.getMap();
-    if(map) {
-        map.flyTo([location.y, location.x], 15);
-    }
-  };
-
+  // Reverse geocode when position changes
   useEffect(() => {
     if (!position) return;
     
     const provider = new OpenStreetMapProvider();
     const reverseGeocode = async () => {
       try {
-        const results = await provider.search({ query: { lat: position[0], lng: position[1] } });
+        const results = await provider.search({ query: `${position.lat},${position.lng}` });
         const addressLabel = results.length > 0 ? (results[0].label as string) : 'Address not found';
         onLocationSelect({
-            lat: position[0],
-            lng: position[1],
+            lat: position.lat,
+            lng: position.lng,
             address: addressLabel,
         });
       } catch (error) {
         console.error("Reverse geocoding failed", error);
-        if (position) {
-            onLocationSelect({
-                lat: position[0],
-                lng: position[1],
-                address: 'Could not determine address'
-            });
-        }
+        onLocationSelect({
+            lat: position.lat,
+            lng: position.lng,
+            address: 'Could not determine address'
+        });
       }
     };
     reverseGeocode();
   }, [position, onLocationSelect]);
 
+  const mapCenter = position ? [position.lat, position.lng] : initialPosition || [23.8103, 90.4125];
+
   return (
     <div className="h-96 w-full rounded-lg overflow-hidden relative">
-      <MapContainer center={position} zoom={13} scrollWheelZoom={true} style={{ height: '100%', width: '100%' }}>
+      <MapContainer center={mapCenter} zoom={13} scrollWheelZoom={true} style={{ height: '100%', width: '100%' }}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <Marker 
-          draggable={true} 
-          eventHandlers={eventHandlers} 
-          position={position} 
-          ref={markerRef}
-        />
-        <SearchField onResult={handleSearchResult} />
-        <MapEvents onMapChange={handleMapChange} />
+        {position && (
+            <Marker 
+              draggable={true} 
+              eventHandlers={eventHandlers} 
+              position={position} 
+              ref={markerRef}
+            />
+        )}
+        <MapInteractionController setPosition={setPosition} />
       </MapContainer>
     </div>
   );
