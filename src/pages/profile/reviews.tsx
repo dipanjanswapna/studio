@@ -30,13 +30,18 @@ export default function ReviewsPage() {
         if (authLoading || !user) return null;
         return query(
             collectionGroup(db, 'reviews'), 
-            where('userId', '==', user.uid),
-            orderBy('createdAt', 'desc')
+            where('userId', '==', user.uid)
         );
     }, [user, db, authLoading]);
 
-    const { data: reviews, loading: reviewsLoading } = useCollection<Review>(reviewsQuery);
+    const { data: unsortedReviews, loading: reviewsLoading } = useCollection<Review>(reviewsQuery);
     
+    const reviews = useMemo(() => {
+        if (!unsortedReviews) return null;
+        // Sort descending by creation date
+        return [...unsortedReviews].sort((a, b) => b.createdAt.seconds - a.createdAt.seconds);
+    }, [unsortedReviews]);
+
     const loading = authLoading || reviewsLoading;
 
   return (
