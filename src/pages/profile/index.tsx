@@ -4,15 +4,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ListOrdered, Heart, Star, Undo2, Truck, Package, Hourglass, CheckCircle, XCircle } from 'lucide-react';
+import { ListOrdered, Heart, Undo2, Truck, Package, Hourglass, CheckCircle, XCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 import PersonalizedRecommendations from '@/components/features/PersonalizedRecommendations';
 import { useMemo } from 'react';
 import { MembershipCard } from '@/components/cards/MembershipCard';
 import { useWishlist } from '@/hooks/useWishlist';
 import { useCollection, useFirestore } from '@/firebase';
-import { collection, query, where, collectionGroup, orderBy, limit } from 'firebase/firestore';
-import type { Order, ReturnRequest, Review } from '@/data/types';
+import { collection, query, where, orderBy } from 'firebase/firestore';
+import type { Order, ReturnRequest } from '@/data/types';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const containerVariants = {
@@ -85,15 +85,8 @@ export default function ProfileDashboardPage() {
   }, [user, db, authLoading]);
   const { data: pendingReturnsData, loading: returnsLoading } = useCollection<ReturnRequest>(returnsQuery);
 
-  const reviewsQuery = useMemo(() => {
-    if (authLoading || !user) return null;
-    return query(collectionGroup(db, 'reviews'), where('userId', '==', user.uid));
-  }, [user, db, authLoading]);
-  const { data: reviewsData, loading: reviewsLoading } = useCollection<Review>(reviewsQuery);
-
   const totalOrders = orders?.length || 0;
   const pendingReturns = pendingReturnsData?.length || 0;
-  const submittedReviews = reviewsData?.length || 0;
   const mostRecentOrder = useMemo(() => orders && orders.length > 0 ? orders[0] : null, [orders]);
 
 
@@ -119,7 +112,7 @@ export default function ProfileDashboardPage() {
 
       {/* Summary Cards */}
       <motion.div 
-        className="grid grid-cols-2 md:grid-cols-4 gap-4"
+        className="grid grid-cols-2 md:grid-cols-3 gap-4"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
@@ -159,19 +152,6 @@ export default function ProfileDashboardPage() {
                       </CardHeader>
                       <CardContent>
                           {returnsLoading ? <Skeleton className="h-7 w-1/2" /> : <div className="text-2xl font-bold">{pendingReturns}</div>}
-                      </CardContent>
-                  </Card>
-              </Link>
-          </motion.div>
-           <motion.div variants={itemVariants}>
-              <Link href="/profile/reviews">
-                  <Card className="hover:bg-accent transition-colors h-full">
-                      <CardHeader className="flex flex-row items-center justify-between pb-2">
-                          <CardTitle className="text-sm font-medium">Reviews</CardTitle>
-                          <Star className="h-4 w-4 text-muted-foreground" />
-                      </CardHeader>
-                      <CardContent>
-                          {reviewsLoading ? <Skeleton className="h-7 w-1/2" /> : <div className="text-2xl font-bold">{submittedReviews}</div>}
                       </CardContent>
                   </Card>
               </Link>

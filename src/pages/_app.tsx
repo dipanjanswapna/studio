@@ -32,8 +32,6 @@ import { RequiredActionProvider } from '@/context/RequiredActionContext';
 import { AddPhoneNumberModal } from '@/components/modals/AddPhoneNumberModal';
 import { FirebaseClientProvider } from '@/firebase/client-provider';
 import { Toaster as SonnerToaster } from 'sonner';
-import { ReviewProvider } from '@/context/ReviewContext';
-import { ReviewModal } from '@/components/modals/ReviewModal';
 import { CartProvider } from '@/context/CartContext';
 
 
@@ -183,25 +181,22 @@ function MyApp({ Component, pageProps }: AppProps) {
                 <SearchProvider>
                   <ProductActionProvider>
                     <RequiredActionProvider>
-                      <ReviewProvider>
-                        <RouteGuard>
-                          {getLayout()}
-                          <SonnerToaster
-                            richColors
-                            position="top-right"
-                            toastOptions={{
-                              classNames: {
-                                toast: 'font-sans',
-                              },
-                            }}
-                          />
-                          <SearchOverlay />
-                          <CartDrawer />
-                          <ProductActionModal />
-                          <AddPhoneNumberModal />
-                          <ReviewModal />
-                        </RouteGuard>
-                      </ReviewProvider>
+                      <RouteGuard>
+                        {getLayout()}
+                        <SonnerToaster
+                          richColors
+                          position="top-right"
+                          toastOptions={{
+                            classNames: {
+                              toast: 'font-sans',
+                            },
+                          }}
+                        />
+                        <SearchOverlay />
+                        <CartDrawer />
+                        <ProductActionModal />
+                        <AddPhoneNumberModal />
+                      </RouteGuard>
                     </RequiredActionProvider>
                   </ProductActionProvider>
                 </SearchProvider>

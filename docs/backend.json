@@ -268,23 +268,6 @@
       },
       "required": ["productId", "variantId", "quantity", "addedAt"]
     },
-    "Review": {
-        "title": "Product Review",
-        "description": "Represents a user's review of a product.",
-        "type": "object",
-        "properties": {
-            "userId": { "type": "string" },
-            "userName": { "type": "string" },
-            "productId": { "type": "string" },
-            "productName": { "type": "string" },
-            "productImageId": { "type": "string" },
-            "rating": { "type": "number" },
-            "title": { "type": "string" },
-            "comment": { "type": "string" },
-            "createdAt": { "type": "string", "format": "date-time" }
-        },
-        "required": ["userId", "userName", "productId", "productName", "rating", "comment", "createdAt"]
-    },
     "OrderItem": {
       "title": "Order Item",
       "description": "Represents a single item within an order.",
@@ -453,14 +436,6 @@
         "$ref": "#/entities/Product"
       },
       "description": "Stores all product information."
-    },
-    "/products/{productId}/reviews/{reviewId}": {
-        "schema": { "$ref": "#/entities/Review" },
-        "description": "Stores user reviews for a specific product."
-    },
-    "/users/{userId}/reviews/{reviewId}": {
-        "schema": { "$ref": "#/entities/Review" },
-        "description": "Stores a copy of a user's reviews for easy querying."
     },
     "/categories/{categoryId}": {
       "schema": {

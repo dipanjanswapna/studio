@@ -13,7 +13,6 @@ import type { Order } from '@/data/types';
 import { Separator } from '@/components/ui/separator';
 import { useMemo } from 'react';
 import { useAuth } from '@/context/authContext';
-import { useReviewModal } from '@/context/ReviewContext';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const getStatusInfo = (status: string) => {
@@ -39,7 +38,6 @@ const itemVariants = {
 export default function OrdersPage() {
     const { user } = useAuth();
     const db = useFirestore();
-    const { openReviewModal } = useReviewModal();
 
     const ordersQuery = useMemo(() => {
         if (!user) return null;
@@ -48,13 +46,6 @@ export default function OrdersPage() {
 
     const { data: orders, loading } = useCollection<Order>(ordersQuery);
 
-    const handleReviewClick = (item: Order['items'][0]) => {
-        openReviewModal({
-            productId: item.productId,
-            productName: item.productName,
-            productImageId: item.productImageId || '',
-        });
-    };
 
   return (
     <motion.div variants={itemVariants}>
@@ -119,9 +110,6 @@ export default function OrdersPage() {
                                                       </div>
                                                       <div className="text-right">
                                                           <p className="font-semibold">৳{(item.price * item.quantity).toFixed(2)}</p>
-                                                          {order.status === 'Delivered' && (
-                                                              <Button variant="link" size="sm" className="p-0 h-auto mt-2" onClick={() => handleReviewClick(item)}>Write a review</Button>
-                                                          )}
                                                       </div>
                                                   </div>
                                               </div>
