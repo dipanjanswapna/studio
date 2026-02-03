@@ -1,49 +1,17 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-  
-    // Public collections are readable by anyone
-    match /products/{productId} {
-      allow read: if true;
-      allow write: if request.auth != null; // Allow writes for authenticated users (e.g., admins)
-    }
-    match /categories/{categoryId} {
-      allow read: if true;
-      allow write: if request.auth != null;
-    }
-    match /brands/{brandId} {
-      allow read: if true;
-      allow write: if request.auth != null;
-    }
-    match /deals/{dealId} {
-      allow read: if true;
-      allow write: if request.auth != null;
-    }
-     match /rewards/{rewardId} {
-      allow read: if true;
-      allow write: if request.auth != null;
-    }
-    match /settings/site {
-        allow read: if true;
-        allow write: if request.auth != null;
-    }
-
-    // Users can manage their own profile and sub-collections
-    match /users/{userId}/{document=**} {
-      allow read, write, delete: if request.auth != null && request.auth.uid == userId;
-    }
-    
-    // Orders can be created by the owner, and read by the owner.
-    // In a real app, you'd add admin access rules here too.
-    match /orders/{orderId} {
-        allow read: if request.auth != null && request.auth.uid == resource.data.userId;
-        allow create: if request.auth != null && request.auth.uid == request.resource.data.userId;
-    }
-
-    // A user can read reviews they wrote. Anyone authenticated can write a review.
-    match /{path=**}/reviews/{reviewId} {
-      allow read: if request.auth != null && request.auth.uid == resource.data.userId;
-      allow write: if request.auth != null && request.auth.uid == request.resource.data.userId;
+    // This rule allows anyone with your Firestore database reference to view, edit,
+    // and delete all data in your Firestore database. It is useful for getting
+    // started, but it is configured to expire after 30 days because it
+    // leaves your app open to attackers. At that time, all client
+    // requests to your Firestore database will be denied.
+    //
+    // Make sure to write security rules for your app before the time limit expires
+    // and all client requests to your Firestore database will be denied.
+    // For more information, see: https://firebase.google.com/docs/firestore/security/get-started
+    match /{document=**} {
+      allow read, write: if request.time < timestamp.date(2029, 12, 31);
     }
   }
 }
