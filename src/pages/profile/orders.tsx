@@ -1,7 +1,7 @@
 'use client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ListOrdered, Package, Truck, XCircle, Hourglass } from 'lucide-react';
+import { ListOrdered, Package, Truck, XCircle, Hourglass, Star } from 'lucide-react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -14,6 +14,7 @@ import { Separator } from '@/components/ui/separator';
 import { useMemo } from 'react';
 import { useAuth } from '@/context/authContext';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useReview } from '@/context/ReviewContext';
 
 const getStatusInfo = (status: string) => {
     switch (status) {
@@ -38,6 +39,7 @@ const itemVariants = {
 export default function OrdersPage() {
     const { user } = useAuth();
     const db = useFirestore();
+    const { openReviewModal } = useReview();
 
     const ordersQuery = useMemo(() => {
         if (!user) return null;
@@ -110,6 +112,12 @@ export default function OrdersPage() {
                                                       </div>
                                                       <div className="text-right">
                                                           <p className="font-semibold">৳{(item.price * item.quantity).toFixed(2)}</p>
+                                                            {order.status === 'Delivered' && (
+                                                              <Button variant="link" size="sm" className="h-auto p-0 mt-1" onClick={() => openReviewModal(item, order.id)}>
+                                                                  <Star className="w-3 h-3 mr-1" />
+                                                                  Write a Review
+                                                              </Button>
+                                                            )}
                                                       </div>
                                                   </div>
                                               </div>

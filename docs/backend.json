@@ -154,6 +154,24 @@
         "createdAt": { "type": "string", "format": "date-time" }
       }
     },
+    "Review": {
+      "title": "Product Review",
+      "description": "A user's review for a specific product.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "productId": { "type": "string" },
+        "orderId": { "type": "string" },
+        "productName": { "type": "string" },
+        "productImageId": { "type": "string" },
+        "rating": { "type": "number", "minimum": 1, "maximum": 5 },
+        "title": { "type": "string" },
+        "comment": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "userName", "productId", "orderId", "productName", "rating", "createdAt"]
+    },
     "Category": {
       "title": "Category",
       "description": "Represents a product category, potentially with nested groups and subcategories for mega menus.",
@@ -436,6 +454,10 @@
         "$ref": "#/entities/Product"
       },
       "description": "Stores all product information."
+    },
+    "/users/{userId}/reviews/{reviewId}": {
+        "schema": { "$ref": "#/entities/Review" },
+        "description": "Stores all reviews written by a specific user."
     },
     "/categories/{categoryId}": {
       "schema": {

@@ -16,6 +16,7 @@ import {
   Ticket,
   Bell,
   Trophy,
+  Star,
 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -32,6 +33,7 @@ import { motion } from 'framer-motion';
 const profileNavItems: { href: string; label: string; icon: LucideIcon }[] = [
     { href: '/profile', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/profile/orders', label: 'My Orders', icon: ListOrdered },
+    { href: '/profile/reviews', label: 'My Reviews', icon: Star },
     { href: '/profile/wishlist', label: 'My Wishlist', icon: Heart },
     { href: '/profile/membership', label: 'Membership', icon: Award },
     { href: '/profile/loyalty', label: 'Loyalty Program', icon: Trophy },

@@ -33,6 +33,8 @@ import { AddPhoneNumberModal } from '@/components/modals/AddPhoneNumberModal';
 import { FirebaseClientProvider } from '@/firebase/client-provider';
 import { Toaster as SonnerToaster } from 'sonner';
 import { CartProvider } from '@/context/CartContext';
+import { ReviewProvider } from '@/context/ReviewContext';
+import { ReviewModal } from '@/components/modals/ReviewModal';
 
 
 const inter = Inter({
@@ -181,22 +183,25 @@ function MyApp({ Component, pageProps }: AppProps) {
                 <SearchProvider>
                   <ProductActionProvider>
                     <RequiredActionProvider>
-                      <RouteGuard>
-                        {getLayout()}
-                        <SonnerToaster
-                          richColors
-                          position="top-right"
-                          toastOptions={{
-                            classNames: {
-                              toast: 'font-sans',
-                            },
-                          }}
-                        />
-                        <SearchOverlay />
-                        <CartDrawer />
-                        <ProductActionModal />
-                        <AddPhoneNumberModal />
-                      </RouteGuard>
+                      <ReviewProvider>
+                        <RouteGuard>
+                          {getLayout()}
+                          <SonnerToaster
+                            richColors
+                            position="top-right"
+                            toastOptions={{
+                              classNames: {
+                                toast: 'font-sans',
+                              },
+                            }}
+                          />
+                          <SearchOverlay />
+                          <CartDrawer />
+                          <ProductActionModal />
+                          <AddPhoneNumberModal />
+                          <ReviewModal />
+                        </RouteGuard>
+                      </ReviewProvider>
                     </RequiredActionProvider>
                   </ProductActionProvider>
                 </SearchProvider>

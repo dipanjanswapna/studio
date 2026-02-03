@@ -159,6 +159,7 @@ export type Review = {
   userId: string;
   userName: string;
   productId: string;
+  orderId: string;
   productName: string;
   productImageId: string;
   rating: number;
@@ -207,5 +208,3 @@ export type PaymentMethod = {
     cardHolderName: string;
     isDefault: boolean;
 };
-
-    
